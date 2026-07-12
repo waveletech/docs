@@ -1,210 +1,1131 @@
 ---
-import astroLogo from '../assets/astro.svg';
-import background from '../assets/background.svg';
+import DeviceScene from './DeviceScene.astro'
+import LongformSection from './LongformSection.astro'
+import { getRelativeLocaleUrl } from 'astro:i18n'
+import { translations, type Locale } from '../i18n/content'
+
+interface Props {
+  locale?: Locale
+}
+
+const { locale = 'en' } = Astro.props
+const t = translations[locale]
+const zhUrl = getRelativeLocaleUrl('zh')
+const enUrl = getRelativeLocaleUrl('en')
+
+const variants = [
+  'variant.r8b',
+  'variant.r8u',
+  'variant.e6b',
+  'variant.e6u',
+  'variant.e12',
+  'variant.e18',
+]
+
+const translated = (key: string) => ({ key })
+const specRows = [
+  {
+    label: 'spec.transport',
+    values: ['BLE', 'TYPE-C', 'BLE', 'TYPE-C', 'TYPE-C', 'TYPE-C'],
+  },
+  { label: 'spec.channels', values: ['8', '8', '6', '6', '12', '18'] },
+  {
+    label: 'spec.frontend',
+    values: [
+      'TI AFE',
+      'TI AFE',
+      'GALVANI W1',
+      'GALVANI W1',
+      'GALVANI W1',
+      'GALVANI W1',
+    ],
+  },
+  {
+    label: 'spec.sample',
+    values: [
+      '250 SPS',
+      '2000 SPS',
+      '250 SPS',
+      '2000 SPS',
+      '2000 SPS',
+      '2000 SPS',
+    ],
+  },
+  {
+    label: 'spec.bandwidth',
+    values: [
+      '0–63 HZ',
+      '0–500 HZ',
+      '0–125 HZ',
+      '0–1000 HZ',
+      '0–1000 HZ',
+      '0–1000 HZ',
+    ],
+  },
+  {
+    label: 'spec.noise',
+    values: [
+      '5 µVPP @10–63',
+      '10 µVPP @50–500',
+      '5 µVPP @60–125',
+      '10 µVPP @50–500',
+      '10 µVPP @50–500',
+      '10 µVPP @50–500',
+    ],
+  },
+  {
+    label: 'spec.imu',
+    values: ['104 HZ', '208 HZ', '104 HZ', '208 HZ', '208 HZ', '208 HZ'],
+  },
+  {
+    label: 'spec.haptic',
+    values: [
+      translated('common.no'),
+      translated('common.no'),
+      translated('common.yes'),
+      translated('common.yes'),
+      translated('common.no'),
+      translated('common.no'),
+    ],
+  },
+  {
+    label: 'spec.module',
+    values: [
+      '55×40×12 MM',
+      '55×40×12 MM',
+      '25×36×14 MM',
+      '25×36×14 MM',
+      '56×47×15 MM',
+      '56×47×15 MM',
+    ],
+  },
+  {
+    label: 'spec.runtime',
+    values: [
+      '18 H',
+      '18 H',
+      '4 H',
+      '4 H',
+      translated('common.external'),
+      translated('common.external'),
+    ],
+  },
+  {
+    label: 'spec.price',
+    values: ['980*', '1280*', '1000*', '1380*', '1800*', '2800*'],
+  },
+  {
+    label: 'spec.status',
+    values: [
+      translated('common.sale'),
+      translated('common.sale'),
+      translated('common.reserve'),
+      translated('common.reserve'),
+      translated('common.pilot'),
+      translated('common.pilot'),
+    ],
+  },
+]
+
+const packetExample = `{
+  "seq": 1842,
+  "t_us": 209341100,
+  "emg": [302, 288, 417, 391, ...],
+  "imu": { "acc": [0.18, -0.04, 0.97],
+           "gyro": [12.4, -3.1, 0.8] },WL
+  "contact": "ok"WL
+}`
 ---
 
-<div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
-	<main>
-		<section id="hero">
-			<a href="https://astro.build"
-				><img src={astroLogo.src} width="115" height="48" alt="Astro Homepage" /></a
-			>
-			<h1>
-				To get started, open the <code><pre>src/pages</pre></code> directory in your project.
-			</h1>
-			<section id="links">
-				<a class="button" href="https://docs.astro.build">Read our docs</a>
-				<a href="https://astro.build/chat"
-					>Join our Discord <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"
-						><path
-							fill="currentColor"
-							d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"
-						></path></svg
-					>
-				</a>
-			</section>
-		</section>
-	</main>
+<DeviceScene />
 
-	<a href="https://astro.build/blog/astro-6-beta/" id="news" class="box">
-		<svg width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"
-			><path
-				d="M24.667 12c1.333 1.414 2 3.192 2 5.334 0 4.62-4.934 5.7-7.334 12C18.444 28.567 18 27.456 18 26c0-4.642 6.667-7.053 6.667-14Zm-5.334-5.333c1.6 1.65 2.4 3.43 2.4 5.333 0 6.602-8.06 7.59-6.4 17.334C13.111 27.787 12 25.564 12 22.666c0-4.434 7.333-8 7.333-16Zm-6-5.333C15.111 3.555 16 5.556 16 7.333c0 8.333-11.333 10.962-5.333 22-3.488-.774-6-4-6-8 0-8.667 8.666-10 8.666-20Z"
-				fill="#111827"></path></svg
-		>
-		<h2>What's New in Astro 6.0?</h2>
-		<p>
-			Redesigned dev server, fonts, live collections, built-in CSP support, and more! Click to
-			explore Astro 6.0's new features.
-		</p>
-	</a>
+<header
+  class='site-header'
+  data-header
+>
+  <a
+    class='brand'
+    href='#top'
+    aria-label='W/L Biointerface'
+  >
+    <span class='brand-mark'>W/L</span>
+    <span class='brand-line'>GALVANI<br />BIOINTERFACE</span>
+  </a>
+  <nav
+    class='main-nav'
+    aria-label={t['nav.label']}
+    data-i18n-aria='nav.label'
+  >
+    <a
+      href='#system'
+      data-i18n='nav.system'
+      >{t['nav.system']}</a
+    >
+    <a
+      href='#variants'
+      data-i18n='nav.variants'
+      >{t['nav.variants']}</a
+    >
+    <a
+      href='#signal'
+      data-i18n='nav.signal'
+      >{t['nav.signal']}</a
+    >
+    <a
+      href='#pipeline'
+      data-i18n='nav.pipeline'
+      >{t['nav.pipeline']}</a
+    >
+    <a
+      href='#protocols'
+      data-i18n='nav.protocols'
+      >{t['nav.protocols']}</a
+    >
+  </nav>
+  <select
+    class='mobile-index'
+    aria-label={t['nav.label']}
+    data-i18n-aria='nav.label'
+    data-mobile-index
+  >
+    <option
+      value=''
+      data-i18n='nav.index'
+      >{t['nav.index']}</option
+    >
+    <option
+      value='#system'
+      data-i18n='nav.system'
+      >{t['nav.system']}</option
+    >
+    <option
+      value='#variants'
+      data-i18n='nav.variants'
+      >{t['nav.variants']}</option
+    >
+    <option
+      value='#signal'
+      data-i18n='nav.signal'
+      >{t['nav.signal']}</option
+    >
+    <option
+      value='#pipeline'
+      data-i18n='nav.pipeline'
+      >{t['nav.pipeline']}</option
+    >
+    <option
+      value='#protocols'
+      data-i18n='nav.protocols'
+      >{t['nav.protocols']}</option
+    >
+  </select>
+  <div
+    class='language-switch'
+    role='group'
+    aria-label={t['lang.label']}
+    data-i18n-aria='lang.label'
+  >
+    <a
+      href={zhUrl}
+      aria-label={t['lang.zh']}
+      data-i18n-aria='lang.zh'
+      aria-current={locale === 'zh' ? 'page' : undefined}
+      lang='zh-CN'
+      >中</a
+    >
+    <a
+      href={enUrl}
+      aria-label={t['lang.en']}
+      data-i18n-aria='lang.en'
+      aria-current={locale === 'en' ? 'page' : undefined}
+      lang='en'
+      >EN</a
+    >
+  </div>
+</header>
+
+<div
+  class='scroll-meter'
+  aria-hidden='true'
+>
+  <span data-scroll-progress></span>
 </div>
 
-<style>
-	#background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		filter: blur(100px);
-	}
+<nav
+  class='floating-index'
+  data-floating-index
+  aria-label={t['nav.label']}
+  data-i18n-aria='nav.label'
+  aria-hidden='true'
+>
+  <div class='floating-index-links'>
+    <a
+      href='#system'
+      data-progress-node='system'
+      data-i18n='nav.system'
+      >{t['nav.system']}</a
+    >
+    <a
+      href='#variants'
+      data-progress-node='variants'
+      data-i18n='nav.variants'
+      >{t['nav.variants']}</a
+    >
+    <a
+      href='#signal'
+      data-progress-node='signal'
+      data-i18n='nav.signal'
+      >{t['nav.signal']}</a
+    >
+    <a
+      href='#motion'
+      data-progress-node='motion'
+      data-i18n='nav.motion'
+      >{t['nav.motion']}</a
+    >
+    <a
+      href='#mechanics'
+      data-progress-node='mechanics'
+      data-i18n='nav.mechanics'
+      >{t['nav.mechanics']}</a
+    >
+    <a
+      href='#pipeline'
+      data-progress-node='pipeline'
+      data-i18n='nav.pipeline'
+      >{t['nav.pipeline']}</a
+    >
+    <a
+      href='#protocols'
+      data-progress-node='protocols'
+      data-i18n='nav.protocols'
+      >{t['nav.protocols']}</a
+    >
+  </div>
+  <div
+    class='floating-index-track'
+    aria-hidden='true'
+  >
+    <span data-floating-progress></span>
+  </div>
+</nav>
 
-	#container {
-		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-		height: 100%;
-	}
+<main id='top'>
+  <section
+    class='hero scene-section'
+    data-scene='hero'
+  >
+    <div class='hero-copy'>
+      <p
+        class='eyebrow hero-eyebrow'
+        data-i18n='hero.kicker'
+      >
+        {t['hero.kicker']}
+      </p>
+      <h1 data-i18n='hero.title'>{t['hero.title']}</h1>
+      <p
+        class='hero-lede'
+        data-i18n='hero.lede'
+      >
+        {t['hero.lede']}
+      </p>
+      <p class='status-tag'>
+        <span></span><b data-i18n='hero.tag'>{t['hero.tag']}</b>
+      </p>
+      <div class='hero-stats'>
+        <div>
+          <strong>18</strong><span data-i18n='hero.stat.channels'
+            >{t['hero.stat.channels']}</span>
+        </div>
+        <div>
+          <strong>2K <small>SPS</small></strong><span
+            data-i18n='hero.stat.sample'>{t['hero.stat.sample']}</span>
+        </div>
+        <div>
+          <strong>24 <small>BIT</small></strong><span
+            data-i18n='hero.stat.depth'>{t['hero.stat.depth']}</span>
+        </div>
+      </div>
+      <div
+        class='hero-meta'
+        aria-label={t['hero.specsLabel']}
+        data-i18n-aria='hero.specsLabel'
+      >
+        <span data-i18n='hero.meta.frontend'>{t['hero.meta.frontend']}</span>
+        <span data-i18n='hero.meta.motion'>{t['hero.meta.motion']}</span>
+        <span data-i18n='hero.meta.fit'>{t['hero.meta.fit']}</span>
+      </div>
+    </div>
+  </section>
 
-	main {
-		height: 100%;
-		display: flex;
-		justify-content: center;
-	}
+  <section
+    id='system'
+    class='content-section scene-section system-section'
+    data-scene='system'
+  >
+    <div
+      class='content-column'
+      data-reveal
+    >
+      <p
+        class='eyebrow'
+        data-i18n='system.eyebrow'
+      >
+        {t['system.eyebrow']}
+      </p>
+      <h2 data-i18n='system.title'>{t['system.title']}</h2>
+      <p
+        class='section-lede'
+        data-i18n='system.body'
+      >
+        {t['system.body']}
+      </p>
+      <p
+        class='callout-line'
+        data-i18n='system.note'
+      >
+        {t['system.note']}
+      </p>
+      <LongformSection
+        section='system'
+        locale={locale}
+      />
+      <ol class='signal-chain'>
+        <li>
+          <span>01</span><b data-i18n='system.step.electrode'
+            >{t['system.step.electrode']}</b>
+        </li>
+        <li>
+          <span>02</span><b data-i18n='system.step.afe'
+            >{t['system.step.afe']}</b>
+        </li>
+        <li>
+          <span>03</span><b data-i18n='system.step.adc'
+            >{t['system.step.adc']}</b>
+        </li>
+        <li>
+          <span>04</span><b data-i18n='system.step.sync'
+            >{t['system.step.sync']}</b>
+        </li>
+        <li>
+          <span>05</span><b data-i18n='system.step.stream'
+            >{t['system.step.stream']}</b>
+        </li>
+      </ol>
+      <div class='sensor-stack'>
+        <p
+          class='micro-label'
+          data-i18n='system.stack'
+        >
+          {t['system.stack']}
+        </p>
+        <ul>
+          <li>
+            <span>EMG</span><b data-i18n='system.stack.emg'
+              >{t['system.stack.emg']}</b>
+          </li>
+          <li>
+            <span>IMU</span><b data-i18n='system.stack.imu'
+              >{t['system.stack.imu']}</b>
+          </li>
+          <li>
+            <span>HPT</span><b data-i18n='system.stack.haptic'
+              >{t['system.stack.haptic']}</b>
+          </li>
+          <li>
+            <span>PWR</span><b data-i18n='system.stack.power'
+              >{t['system.stack.power']}</b>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-	#hero {
-		display: flex;
-		align-items: start;
-		flex-direction: column;
-		justify-content: center;
-		padding: 16px;
-	}
+  <section
+    id='variants'
+    class='wide-section variants-section scene-section'
+    data-scene='variants'
+  >
+    <div
+      class='wide-heading'
+      data-reveal
+    >
+      <p
+        class='eyebrow'
+        data-i18n='variants.eyebrow'
+      >
+        {t['variants.eyebrow']}
+      </p>
+      <h2 data-i18n='variants.title'>{t['variants.title']}</h2>
+      <p data-i18n='variants.body'>{t['variants.body']}</p>
+    </div>
+    <LongformSection
+      section='variants'
+      locale={locale}
+    />
+    <div
+      class='table-scroll'
+      tabindex='0'
+      aria-label={t['variants.title']}
+      data-i18n-aria='variants.title'
+      data-reveal
+    >
+      <table class='spec-table'>
+        <thead>
+          <tr>
+            <th>SPEC / NODE</th>
+            {
+              variants.map((key, index) => (
+                <th>
+                  <>
+                    <span>0{index + 1}</span>
+                    <b data-i18n={key}>{t[key]}</b>
+                  </>
+                </th>
+              ))
+            }
+          </tr>
+        </thead>
+        <tbody>
+          {
+            specRows.map((row) => (
+              <tr>
+                <th data-i18n={row.label}>{t[row.label]}</th>
+                {row.values.map((value) =>
+                  typeof value === 'string' ? (
+                    <td>{value}</td>
+                  ) : (
+                    <td data-i18n={value.key}>{t[value.key]}</td>
+                  ),
+                )}
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-	h1 {
-		font-size: 22px;
-		margin-top: 0.25em;
-	}
+  <section
+    id='signal'
+    class='content-section scene-section signal-section'
+    data-scene='signal'
+  >
+    <div
+      class='content-column wide-copy'
+      data-reveal
+    >
+      <p
+        class='eyebrow'
+        data-i18n='signal.eyebrow'
+      >
+        {t['signal.eyebrow']}
+      </p>
+      <h2 data-i18n='signal.title'>{t['signal.title']}</h2>
+      <p
+        class='section-lede'
+        data-i18n='signal.body'
+      >
+        {t['signal.body']}
+      </p>
+    </div>
+    <LongformSection
+      section='signal'
+      locale={locale}
+    />
+    <div
+      class='scope-layout'
+      data-reveal
+    >
+      <div class='scope-panel'>
+        <div class='panel-heading'>
+          <span data-i18n='signal.scope'>{t['signal.scope']}</span>
+          <span data-i18n='signal.scope.note'>{t['signal.scope.note']}</span>
+        </div>
+        <canvas
+          class='signal-scope'
+          data-signal-scope
+          aria-hidden='true'
+        ></canvas>
+        <div
+          class='scope-channels'
+          aria-hidden='true'
+        >
+          <span>CH 01</span><span>CH 04</span><span>CH 08</span><span
+            >+001842</span>
+        </div>
+      </div>
+      <div class='signal-metrics'>
+        <div>
+          <strong>5–10 <small>µVPP</small></strong><span
+            data-i18n='signal.metric.noise'>{t['signal.metric.noise']}</span>
+        </div>
+        <div>
+          <strong>0–1K <small>HZ</small></strong><span
+            data-i18n='signal.metric.band'>{t['signal.metric.band']}</span>
+        </div>
+        <div>
+          <strong>&lt; 1 <small>SAMPLE</small></strong><span
+            data-i18n='signal.metric.sync'>{t['signal.metric.sync']}</span>
+        </div>
+      </div>
+    </div>
+    <div
+      class='feature-row'
+      data-reveal
+    >
+      <article>
+        <span>01</span><h3 data-i18n='signal.feature.raw'>
+          {t['signal.feature.raw']}
+        </h3><p data-i18n='signal.feature.raw.body'>
+          {t['signal.feature.raw.body']}
+        </p>
+      </article>
+      <article>
+        <span>02</span><h3 data-i18n='signal.feature.filter'>
+          {t['signal.feature.filter']}
+        </h3><p data-i18n='signal.feature.filter.body'>
+          {t['signal.feature.filter.body']}
+        </p>
+      </article>
+      <article>
+        <span>03</span><h3 data-i18n='signal.feature.guard'>
+          {t['signal.feature.guard']}
+        </h3><p data-i18n='signal.feature.guard.body'>
+          {t['signal.feature.guard.body']}
+        </p>
+      </article>
+    </div>
+  </section>
 
-	#links {
-		display: flex;
-		gap: 16px;
-	}
+  <section
+    id='motion'
+    class='content-section scene-section motion-section'
+    data-scene='motion'
+  >
+    <div class='motion-grid'>
+      <div data-reveal>
+        <p
+          class='eyebrow'
+          data-i18n='motion.eyebrow'
+        >
+          {t['motion.eyebrow']}
+        </p>
+        <h2 data-i18n='motion.title'>{t['motion.title']}</h2>
+        <p
+          class='section-lede'
+          data-i18n='motion.body'
+        >
+          {t['motion.body']}
+        </p>
+      </div>
+      <div
+        class='imu-panel'
+        data-reveal
+      >
+        <div class='panel-heading'>
+          <span data-i18n='motion.caption'>{t['motion.caption']}</span><span
+            >IMU / 208 HZ</span>
+        </div>
+        <div
+          class='axis-visual'
+          aria-hidden='true'
+        >
+          <div class='axis-ring ring-a'></div><div class='axis-ring ring-b'>
+          </div><div class='axis-core'>XYZ</div>
+        </div>
+        <div class='imu-readouts'>
+          <div>
+            <span data-i18n='motion.accel'>{t['motion.accel']}</span><b
+              >X +0.18 G</b
+            ><b>Y −0.04 G</b><b>Z +0.97 G</b>
+          </div>
+          <div>
+            <span data-i18n='motion.gyro'>{t['motion.gyro']}</span><b
+              >R +12.4°</b
+            ><b>P −03.1°</b><b>Y +00.8°</b>
+          </div>
+          <div>
+            <span data-i18n='motion.fusion'>{t['motion.fusion']}</span><b
+              >ΔT 0.48 MS</b
+            ><b>SEQ 01842</b><b>LOCKED</b>
+          </div>
+        </div>
+      </div>
+    </div>
+    <LongformSection
+      section='motion'
+      locale={locale}
+    />
+  </section>
 
-	#links a {
-		display: flex;
-		align-items: center;
-		padding: 10px 12px;
-		color: #111827;
-		text-decoration: none;
-		transition: color 0.2s;
-	}
+  <section
+    id='mechanics'
+    class='wide-section mechanics-section scene-section'
+    data-scene='mechanics'
+  >
+    <div
+      class='mechanics-heading'
+      data-reveal
+    >
+      <p
+        class='eyebrow'
+        data-i18n='mechanics.eyebrow'
+      >
+        {t['mechanics.eyebrow']}
+      </p>
+      <h2 data-i18n='mechanics.title'>{t['mechanics.title']}</h2>
+      <p data-i18n='mechanics.body'>{t['mechanics.body']}</p>
+    </div>
+    <LongformSection
+      section='mechanics'
+      locale={locale}
+    />
+    <div
+      class='wearability-strip'
+      data-reveal
+    >
+      <div>
+        <strong>25 <small>MM</small></strong><span data-i18n='mechanics.width'
+          >{t['mechanics.width']}</span>
+      </div>
+      <div>
+        <strong>≈3 <small>MM</small></strong><span
+          data-i18n='mechanics.thickness'>{t['mechanics.thickness']}</span>
+      </div>
+      <div>
+        <strong>14–22 <small>CM</small></strong><span data-i18n='mechanics.fit'
+          >{t['mechanics.fit']}</span>
+      </div>
+      <div>
+        <strong>S / M / L</strong><span data-i18n='mechanics.material'
+          >{t['mechanics.material']}</span>
+      </div>
+    </div>
+    <div
+      class='product-gallery'
+      data-reveal
+    >
+      <figure>
+        <div class='image-well'>
+          <img
+            src='/images/research-band.png'
+            alt={t['gallery.research.alt']}
+            data-i18n-alt='gallery.research.alt'
+            loading='lazy'
+          />
+        </div>
+        <figcaption>
+          <b data-i18n='gallery.research'>{t['gallery.research']}</b><span
+            data-i18n='gallery.research.body'
+            >{t['gallery.research.body']}</span>
+        </figcaption>
+      </figure>
+      <figure>
+        <div class='image-well'>
+          <img
+            src='/images/embodied-6-band.png'
+            alt={t['gallery.embodied6.alt']}
+            data-i18n-alt='gallery.embodied6.alt'
+            loading='lazy'
+          />
+        </div>
+        <figcaption>
+          <b data-i18n='gallery.embodied6'>{t['gallery.embodied6']}</b><span
+            data-i18n='gallery.embodied6.body'
+            >{t['gallery.embodied6.body']}</span>
+        </figcaption>
+      </figure>
+      <figure>
+        <div class='image-well'>
+          <img
+            src='/images/embodied-18-band.png'
+            alt={t['gallery.embodied18.alt']}
+            data-i18n-alt='gallery.embodied18.alt'
+            loading='lazy'
+          />
+        </div>
+        <figcaption>
+          <b data-i18n='gallery.embodied18'>{t['gallery.embodied18']}</b><span
+            data-i18n='gallery.embodied18.body'
+            >{t['gallery.embodied18.body']}</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
 
-	#links a:hover {
-		color: rgb(78, 80, 86);
-	}
+  <section
+    id='pipeline'
+    class='content-section scene-section pipeline-section'
+    data-scene='pipeline'
+  >
+    <div
+      class='pipeline-intro'
+      data-reveal
+    >
+      <p
+        class='eyebrow'
+        data-i18n='pipeline.eyebrow'
+      >
+        {t['pipeline.eyebrow']}
+      </p>
+      <h2 data-i18n='pipeline.title'>{t['pipeline.title']}</h2>
+      <p
+        class='section-lede'
+        data-i18n='pipeline.body'
+      >
+        {t['pipeline.body']}
+      </p>
+    </div>
+    <LongformSection
+      section='pipeline'
+      locale={locale}
+    />
+    <div class='pipeline-grid'>
+      <ol
+        class='workflow'
+        data-reveal
+      >
+        <li>
+          <span>01</span><div>
+            <b data-i18n='pipeline.step.connect'>{t['pipeline.step.connect']}</b
+            ><p data-i18n='pipeline.step.connect.body'>
+              {t['pipeline.step.connect.body']}
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>02</span><div>
+            <b data-i18n='pipeline.step.check'>{t['pipeline.step.check']}</b><p
+              data-i18n='pipeline.step.check.body'
+            >
+              {t['pipeline.step.check.body']}
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>03</span><div>
+            <b data-i18n='pipeline.step.zero'>{t['pipeline.step.zero']}</b><p
+              data-i18n='pipeline.step.zero.body'
+            >
+              {t['pipeline.step.zero.body']}
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>04</span><div>
+            <b data-i18n='pipeline.step.capture'>{t['pipeline.step.capture']}</b
+            ><p data-i18n='pipeline.step.capture.body'>
+              {t['pipeline.step.capture.body']}
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>05</span><div>
+            <b data-i18n='pipeline.step.pack'>{t['pipeline.step.pack']}</b><p
+              data-i18n='pipeline.step.pack.body'
+            >
+              {t['pipeline.step.pack.body']}
+            </p>
+          </div>
+        </li>
+      </ol>
+      <div
+        class='packet-panel'
+        data-reveal
+      >
+        <div class='panel-heading'>
+          <span data-i18n='pipeline.packet'>{t['pipeline.packet']}</span><span
+            >24 BIT / CRC OK</span>
+        </div>
+        <pre><code>{packetExample}</code></pre>
+        <div class='transport-modes'>
+          <div>
+            <b data-i18n='pipeline.ble'>{t['pipeline.ble']}</b><span
+              data-i18n='pipeline.ble.body'>{t['pipeline.ble.body']}</span>
+          </div>
+          <div>
+            <b data-i18n='pipeline.usb'>{t['pipeline.usb']}</b><span
+              data-i18n='pipeline.usb.body'>{t['pipeline.usb.body']}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-	#links a svg {
-		height: 1em;
-		margin-left: 8px;
-	}
+  <section
+    id='protocols'
+    class='wide-section protocols-section scene-section'
+    data-scene='protocols'
+  >
+    <div
+      class='protocols-heading'
+      data-reveal
+    >
+      <p
+        class='eyebrow'
+        data-i18n='protocols.eyebrow'
+      >
+        {t['protocols.eyebrow']}
+      </p>
+      <h2 data-i18n='protocols.title'>{t['protocols.title']}</h2>
+      <p data-i18n='protocols.body'>{t['protocols.body']}</p>
+    </div>
+    <LongformSection
+      section='protocols'
+      locale={locale}
+    />
+    <div
+      class='protocol-grid'
+      data-reveal
+    >
+      <article>
+        <span>01 / DATASET</span><h3 data-i18n='protocol.gesture'>
+          {t['protocol.gesture']}
+        </h3><p data-i18n='protocol.gesture.body'>
+          {t['protocol.gesture.body']}
+        </p>
+      </article>
+      <article>
+        <span>02 / CONTROL</span><h3 data-i18n='protocol.teleop'>
+          {t['protocol.teleop']}
+        </h3><p data-i18n='protocol.teleop.body'>{t['protocol.teleop.body']}</p>
+      </article>
+      <article>
+        <span>03 / ADAPT</span><h3 data-i18n='protocol.prosthetic'>
+          {t['protocol.prosthetic']}
+        </h3><p data-i18n='protocol.prosthetic.body'>
+          {t['protocol.prosthetic.body']}
+        </p>
+      </article>
+      <article>
+        <span>04 / LOAD</span><h3 data-i18n='protocol.ergonomics'>
+          {t['protocol.ergonomics']}
+        </h3><p data-i18n='protocol.ergonomics.body'>
+          {t['protocol.ergonomics.body']}
+        </p>
+      </article>
+    </div>
+    <div
+      class='quality-gate'
+      data-reveal
+    >
+      <h3 data-i18n='protocol.checklist'>{t['protocol.checklist']}</h3>
+      <ul>
+        <li>
+          <span>✓</span><b data-i18n='protocol.check.contact'
+            >{t['protocol.check.contact']}</b>
+        </li>
+        <li>
+          <span>✓</span><b data-i18n='protocol.check.baseline'
+            >{t['protocol.check.baseline']}</b>
+        </li>
+        <li>
+          <span>✓</span><b data-i18n='protocol.check.clock'
+            >{t['protocol.check.clock']}</b>
+        </li>
+        <li>
+          <span>✓</span><b data-i18n='protocol.check.meta'
+            >{t['protocol.check.meta']}</b>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
 
-	#links a.button {
-		color: white;
-		background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
-		box-shadow:
-			inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-			inset 0 -2px 0 rgba(0, 0, 0, 0.24);
-		border-radius: 10px;
-	}
+<footer
+  class='site-footer scene-section'
+  data-scene='footer'
+>
+  <div>
+    <p
+      class='eyebrow'
+      data-i18n='footer.kicker'
+    >
+      {t['footer.kicker']}
+    </p>
+    <h2 data-i18n='footer.title'>{t['footer.title']}</h2>
+    <p data-i18n='footer.note'>{t['footer.note']}</p>
+  </div>
+  <a
+    class='top-button'
+    href='#top'
+    title={t['footer.top']}
+    aria-label={t['footer.top']}
+    data-i18n-title='footer.top'
+    data-i18n-aria='footer.top'
+    >↑</a
+  >
+</footer>
 
-	#links a.button:hover {
-		color: rgb(230, 230, 230);
-		box-shadow: none;
-	}
+<script>
+  const mobileIndex = document.querySelector<HTMLSelectElement>(
+    '[data-mobile-index]',
+  )
+  mobileIndex?.addEventListener('change', () => {
+    if (mobileIndex.value) window.location.hash = mobileIndex.value
+    mobileIndex.value = ''
+  })
 
-	pre {
-		font-family:
-			ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono',
-			monospace;
-		font-weight: normal;
-		background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		margin: 0;
-	}
+  const header = document.querySelector<HTMLElement>('[data-header]')
+  const progress = document.querySelector<HTMLElement>('[data-scroll-progress]')
+  const floatingIndex = document.querySelector<HTMLElement>(
+    '[data-floating-index]',
+  )
+  const floatingProgress = document.querySelector<HTMLElement>(
+    '[data-floating-progress]',
+  )
+  const progressNodes = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('[data-progress-node]'),
+  )
+  const hero = document.querySelector<HTMLElement>('.hero')
+  const updateScroll = () => {
+    const max = Math.max(
+      1,
+      document.documentElement.scrollHeight - window.innerHeight,
+    )
+    const ratio = Math.min(1, window.scrollY / max)
+    progress?.style.setProperty('transform', `scaleX(${ratio})`)
+    floatingProgress?.style.setProperty('transform', `scaleX(${ratio})`)
+    header?.classList.toggle('is-scrolled', window.scrollY > 24)
+    const indexVisible =
+      window.scrollY > Math.min(360, (hero?.offsetHeight ?? 720) * 0.5)
+    floatingIndex?.classList.toggle('is-visible', indexVisible)
+    floatingIndex?.setAttribute('aria-hidden', String(!indexVisible))
+    const probe = window.innerHeight * 0.32
+    let activeNode = ''
+    progressNodes.forEach((node) => {
+      const target = document.getElementById(node.dataset.progressNode ?? '')
+      if (target && target.getBoundingClientRect().top <= probe)
+        activeNode = node.dataset.progressNode ?? ''
+    })
+    progressNodes.forEach((node) => {
+      if (node.dataset.progressNode === activeNode)
+        node.setAttribute('aria-current', 'location')
+      else node.removeAttribute('aria-current')
+    })
+  }
+  updateScroll()
+  window.addEventListener('scroll', updateScroll, { passive: true })
 
-	h2 {
-		margin: 0 0 1em;
-		font-weight: normal;
-		color: #111827;
-		font-size: 20px;
-	}
+  const reducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  ).matches
+  const revealTargets = document.querySelectorAll<HTMLElement>('[data-reveal]')
+  if (reducedMotion) {
+    revealTargets.forEach((target) => target.classList.add('is-visible'))
+  } else {
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            ;(entry.target as HTMLElement).classList.add('is-visible')
+            revealObserver.unobserve(entry.target)
+          }
+        })
+      },
+      { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+    )
+    revealTargets.forEach((target) => revealObserver.observe(target))
+  }
+  document.documentElement.classList.add('app-ready')
 
-	p {
-		color: #4b5563;
-		font-size: 16px;
-		line-height: 24px;
-		letter-spacing: -0.006em;
-		margin: 0;
-	}
+  const scope = document.querySelector<HTMLCanvasElement>('[data-signal-scope]')
+  const scopeContext = scope?.getContext('2d')
+  let scopeWidth = 0
+  let scopeHeight = 0
+  let scopeFrame = 0
+  let scopeVisible = false
 
-	code {
-		display: inline-block;
-		background:
-			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
-			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
-		border-radius: 8px;
-		border: 1px solid transparent;
-		padding: 6px 8px;
-	}
+  const resizeScope = () => {
+    if (!scope || !scopeContext) return
+    const rect = scope.getBoundingClientRect()
+    const density = Math.min(window.devicePixelRatio, 2)
+    scopeWidth = Math.max(1, rect.width)
+    scopeHeight = Math.max(1, rect.height)
+    scope.width = Math.round(scopeWidth * density)
+    scope.height = Math.round(scopeHeight * density)
+    scopeContext.setTransform(density, 0, 0, density, 0, 0)
+  }
 
-	.box {
-		padding: 16px;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 16px;
-		border: 1px solid white;
-	}
+  const drawScope = (time = 0) => {
+    if (!scope || !scopeContext) return
+    const ctx = scopeContext
+    ctx.clearRect(0, 0, scopeWidth, scopeHeight)
+    ctx.fillStyle = '#171b22'
+    ctx.fillRect(0, 0, scopeWidth, scopeHeight)
+    ctx.strokeStyle = 'rgba(242, 243, 245, 0.08)'
+    ctx.lineWidth = 1
+    for (let x = 0; x <= scopeWidth; x += 36) {
+      ctx.beginPath()
+      ctx.moveTo(x, 0)
+      ctx.lineTo(x, scopeHeight)
+      ctx.stroke()
+    }
+    for (let y = 0; y <= scopeHeight; y += 28) {
+      ctx.beginPath()
+      ctx.moveTo(0, y)
+      ctx.lineTo(scopeWidth, y)
+      ctx.stroke()
+    }
+    const colors = [
+      '#0d9488',
+      '#1c1917',
+      '#78716c',
+      '#0d9488',
+      '#44403c',
+      '#1c1917',
+      '#78716c',
+      '#0d9488',
+    ]
+    for (let channel = 0; channel < 8; channel += 1) {
+      const baseY = ((channel + 0.5) / 8) * scopeHeight
+      ctx.strokeStyle = colors[channel]
+      ctx.globalAlpha = channel < 4 ? 0.95 : 0.58
+      ctx.lineWidth = channel === 0 ? 1.8 : 1.1
+      ctx.beginPath()
+      for (let x = 0; x <= scopeWidth; x += 2) {
+        const phase = x * (0.045 + channel * 0.003) + time * 0.0022
+        const burst = Math.pow(
+          Math.max(0, Math.sin(x * 0.012 + time * 0.0007 + channel)),
+          5,
+        )
+        const wave =
+          Math.sin(phase) * 2.2 +
+          Math.sin(phase * 2.7) * burst * (6 + channel * 0.45)
+        const y = baseY + wave
+        if (x === 0) ctx.moveTo(x, y)
+        else ctx.lineTo(x, y)
+      }
+      ctx.stroke()
+    }
+    ctx.globalAlpha = 1
+    if (!reducedMotion && !document.hidden && scopeVisible)
+      scopeFrame = requestAnimationFrame(drawScope)
+  }
 
-	#news {
-		position: absolute;
-		bottom: 16px;
-		right: 16px;
-		max-width: 300px;
-		text-decoration: none;
-		transition: background 0.2s;
-		backdrop-filter: blur(50px);
-	}
-
-	#news:hover {
-		background: rgba(255, 255, 255, 0.55);
-	}
-
-	@media screen and (max-height: 368px) {
-		#news {
-			display: none;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		#container {
-			display: flex;
-			flex-direction: column;
-		}
-
-		#hero {
-			display: block;
-			padding-top: 10%;
-		}
-
-		#links {
-			flex-wrap: wrap;
-		}
-
-		#links a.button {
-			padding: 14px 18px;
-		}
-
-		#news {
-			right: 16px;
-			left: 16px;
-			bottom: 2.5rem;
-			max-width: 100%;
-		}
-
-		h1 {
-			line-height: 1.5;
-		}
-	}
-</style>
+  if (scope && scopeContext) {
+    resizeScope()
+    const scopeResizeObserver = new ResizeObserver(resizeScope)
+    scopeResizeObserver.observe(scope)
+    if (reducedMotion) {
+      drawScope(1400)
+    } else {
+      const scopeVisibilityObserver = new IntersectionObserver(
+        (entries) => {
+          scopeVisible = entries.some((entry) => entry.isIntersecting)
+          cancelAnimationFrame(scopeFrame)
+          if (scopeVisible && !document.hidden)
+            scopeFrame = requestAnimationFrame(drawScope)
+        },
+        { rootMargin: '120px 0px', threshold: 0.01 },
+      )
+      scopeVisibilityObserver.observe(scope)
+    }
+    document.addEventListener('visibilitychange', () => {
+      cancelAnimationFrame(scopeFrame)
+      if (!document.hidden && !reducedMotion && scopeVisible)
+        scopeFrame = requestAnimationFrame(drawScope)
+    })
+  }
+</script>

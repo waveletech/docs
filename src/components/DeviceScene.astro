@@ -1,0 +1,460 @@
+<div class="device-stage" data-device-stage aria-hidden="true">
+	<canvas class="device-canvas" data-device-canvas></canvas>
+	<div class="scene-hud hud-top">
+		<span>WL / NODE 18U</span>
+		<span data-scene-phase>BOOT</span>
+	</div>
+	<div class="scene-hud hud-bottom">
+		<span>EMG 18CH</span>
+		<span>IMU 6AX</span>
+		<span>SYNC LOCK</span>
+	</div>
+</div>
+
+<style>
+	.device-stage {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		overflow: hidden;
+		pointer-events: none;
+		transition: opacity 320ms ease;
+	}
+
+	.device-canvas {
+		display: block;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+	}
+
+	.device-stage[data-canvas-ready='true']:not(.webgl-failed) .device-canvas {
+		opacity: 1;
+	}
+
+	.device-stage.webgl-failed .device-canvas {
+		display: none;
+	}
+
+
+	.scene-hud {
+		position: absolute;
+		right: clamp(18px, 3vw, 48px);
+		width: min(31vw, 460px);
+		display: flex;
+		justify-content: space-between;
+		font: 700 10px/1.2 var(--font-mono);
+		color: rgba(23, 26, 31, 0.58);
+	}
+
+	.scene-hud::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: rgba(23, 26, 31, 0.18);
+	}
+
+	.hud-top {
+		top: 92px;
+		padding-top: 10px;
+	}
+
+	.hud-top::before {
+		top: 0;
+	}
+
+	.hud-bottom {
+		bottom: 28px;
+		padding-bottom: 10px;
+	}
+
+	.hud-bottom::before {
+		bottom: 0;
+	}
+
+	@media (max-width: 900px) {
+		.device-stage {
+			opacity: 0.18;
+		}
+
+		.device-stage[data-active-scene='hero'] {
+			opacity: 0.7;
+		}
+
+		.scene-hud {
+			left: 18px;
+			right: 18px;
+			width: auto;
+			opacity: 0.52;
+		}
+
+		.hud-top {
+			top: 78px;
+		}
+
+		.hud-bottom {
+			display: none;
+		}
+
+	}
+</style>
+
+<script>
+	import * as THREE from 'three';
+	import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+	import { MeshSurfaceSampler } from 'three/addons/math/MeshSurfaceSampler.js';
+
+	const stage = document.querySelector<HTMLElement>('[data-device-stage]');
+	const canvas = document.querySelector<HTMLCanvasElement>('[data-device-canvas]');
+	const phaseLabel = document.querySelector<HTMLElement>('[data-scene-phase]');
+	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	if (stage && canvas) {
+		try {
+			let mobile = window.matchMedia('(max-width: 900px)').matches;
+			const renderer = new THREE.WebGLRenderer({
+				canvas,
+				alpha: true,
+				antialias: !mobile,
+				powerPreference: 'high-performance',
+			});
+			renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1.25 : 1.7));
+			renderer.setSize(window.innerWidth, window.innerHeight, false);
+			renderer.outputColorSpace = THREE.SRGBColorSpace;
+			renderer.toneMapping = THREE.ACESFilmicToneMapping;
+			renderer.toneMappingExposure = 1.15;
+
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera(32, window.innerWidth / window.innerHeight, 0.1, 100);
+			camera.position.set(0, 0, mobile ? 10.4 : 7.6);
+
+			const device = new THREE.Group();
+			scene.add(device);
+
+			const charcoal = new THREE.MeshPhysicalMaterial({
+				color: 0x202631,
+				roughness: 0.78,
+				metalness: 0.08,
+				clearcoat: 0.12,
+				clearcoatRoughness: 0.72,
+				transparent: true,
+				opacity: 0,
+				depthWrite: false,
+			});
+			const moduleMaterial = new THREE.MeshPhysicalMaterial({
+				color: 0x111827,
+				roughness: 0.36,
+				metalness: 0.32,
+				clearcoat: 0.5,
+				clearcoatRoughness: 0.28,
+				transparent: true,
+				opacity: 0,
+				depthWrite: false,
+			});
+			const electrodeMaterial = new THREE.MeshStandardMaterial({
+				color: 0xb8c3d1,
+				roughness: 0.2,
+				metalness: 0.82,
+				transparent: true,
+				opacity: 0,
+				depthWrite: false,
+			});
+			const acidMaterial = new THREE.MeshBasicMaterial({ color: 0x1c1917, transparent: true, opacity: 0 });
+			const stippleMaterial = new THREE.ShaderMaterial({
+				vertexShader: `
+					attribute float aSize;
+					attribute vec3 color;
+					varying vec3 vColor;
+					void main() {
+						vColor = color;
+						gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+						gl_PointSize = aSize;
+					}
+				`,
+				fragmentShader: `
+					varying vec3 vColor;
+					void main() {
+						float distanceToCenter = length(gl_PointCoord - vec2(0.5));
+						if (distanceToCenter > 0.5) discard;
+						float edge = 1.0 - smoothstep(0.34, 0.5, distanceToCenter);
+						gl_FragColor = vec4(vColor, edge * 0.94);
+					}
+				`,
+				transparent: true,
+				depthTest: true,
+				depthWrite: true,
+			});
+			const stippleLight = new THREE.Vector3(-0.45, 0.72, 0.52).normalize();
+			const ink = new THREE.Color(0x1c1917);
+			const softInk = new THREE.Color(0x78716c);
+			const samplePosition = new THREE.Vector3();
+			const sampleNormal = new THREE.Vector3();
+			const sampleColor = new THREE.Color();
+			const addStippleSurface = (mesh: THREE.Mesh, targetCount: number) => {
+				const sampler = new MeshSurfaceSampler(mesh).build();
+				const positions: number[] = [];
+				const colors: number[] = [];
+				const sizes: number[] = [];
+				for (let attempt = 0; attempt < targetCount * 3 && positions.length / 3 < targetCount; attempt += 1) {
+					sampler.sample(samplePosition, sampleNormal);
+					const light = Math.max(0, sampleNormal.dot(stippleLight));
+					const darkness = 0.34 + (1 - light) * 0.66;
+					const keepProbability = 0.42 + darkness * 0.55;
+					if (Math.random() > keepProbability) continue;
+					positions.push(samplePosition.x, samplePosition.y, samplePosition.z);
+					sampleColor.copy(softInk).lerp(ink, Math.min(1, darkness + Math.random() * 0.14));
+					colors.push(sampleColor.r, sampleColor.g, sampleColor.b);
+					sizes.push((mobile ? 1.6 : 1.8) + darkness * 0.9 + Math.random() * 0.7);
+				}
+				const geometry = new THREE.BufferGeometry();
+				geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+				geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+				geometry.setAttribute('aSize', new THREE.Float32BufferAttribute(sizes, 1));
+				const points = new THREE.Points(geometry, stippleMaterial);
+				points.renderOrder = 3;
+				mesh.add(points);
+			};
+
+			const band = new THREE.Mesh(
+				new THREE.TorusGeometry(1.47, 0.235, mobile ? 16 : 24, mobile ? 72 : 144),
+				charcoal,
+			);
+			band.scale.set(0.88, 1.08, 1);
+			addStippleSurface(band, mobile ? 12000 : 28000);
+			device.add(band);
+
+			const innerBand = new THREE.Mesh(
+				new THREE.TorusGeometry(1.42, 0.09, 12, mobile ? 64 : 120),
+				new THREE.MeshStandardMaterial({
+					color: 0x0b1018,
+					roughness: 0.94,
+					metalness: 0,
+					transparent: true,
+					opacity: 0,
+					depthWrite: false,
+				}),
+			);
+			innerBand.scale.set(0.88, 1.08, 1.02);
+			addStippleSurface(innerBand, mobile ? 5000 : 10000);
+			device.add(innerBand);
+
+			const moduleGroup = new THREE.Group();
+			const moduleBody = new THREE.Mesh(new RoundedBoxGeometry(1.92, 0.68, 1.04, 5, 0.16), moduleMaterial);
+			addStippleSurface(moduleBody, mobile ? 6500 : 13000);
+			moduleGroup.add(moduleBody);
+			const topPlate = new THREE.Mesh(
+				new RoundedBoxGeometry(1.56, 0.035, 0.72, 3, 0.08),
+				new THREE.MeshStandardMaterial({
+					color: 0x263247,
+					roughness: 0.5,
+					metalness: 0.32,
+					transparent: true,
+					opacity: 0,
+					depthWrite: false,
+				}),
+			);
+			topPlate.position.set(0, 0.355, 0);
+			addStippleSurface(topPlate, mobile ? 1200 : 2400);
+			moduleGroup.add(topPlate);
+
+			for (let lineIndex = 0; lineIndex < 7; lineIndex += 1) {
+				const vent = new THREE.Mesh(
+					new RoundedBoxGeometry(0.095, 0.018, 0.43, 2, 0.02),
+					new THREE.MeshBasicMaterial({ color: 0x1c1917, transparent: true, opacity: 0 }),
+				);
+				vent.position.set(-0.48 + lineIndex * 0.16, 0.38, -0.08);
+				moduleGroup.add(vent);
+			}
+
+			const led = new THREE.Mesh(new THREE.SphereGeometry(0.055, 16, 12), acidMaterial);
+			led.position.set(0.68, 0.37, 0.22);
+			moduleGroup.add(led);
+			const port = new THREE.Mesh(
+				new RoundedBoxGeometry(0.38, 0.14, 0.035, 3, 0.035),
+				new THREE.MeshBasicMaterial({ color: 0x1c1917, transparent: true, opacity: 0 }),
+			);
+			port.position.set(-0.58, -0.08, 0.53);
+			moduleGroup.add(port);
+			moduleGroup.position.set(0, 1.52, 0.02);
+			device.add(moduleGroup);
+
+			const electrodeGroup = new THREE.Group();
+			const electrodeBases: Array<THREE.Vector3> = [];
+			const electrodeMeshes: Array<THREE.Mesh> = [];
+			const electrodeCount = mobile ? 10 : 14;
+			for (let index = 0; index < electrodeCount; index += 1) {
+				const angle = Math.PI * 1.04 + (index / (electrodeCount - 1)) * Math.PI * 0.92;
+				const radius = 1.18;
+				const electrode = new THREE.Mesh(new THREE.CapsuleGeometry(0.074, 0.25, 4, 8), electrodeMaterial);
+				const position = new THREE.Vector3(Math.cos(angle) * radius * 0.88, Math.sin(angle) * radius * 1.08, 0.29);
+				electrode.position.copy(position);
+				electrode.rotation.z = angle;
+				addStippleSurface(electrode, mobile ? 300 : 560);
+				electrodeBases.push(position.clone());
+				electrodeMeshes.push(electrode);
+				electrodeGroup.add(electrode);
+			}
+			device.add(electrodeGroup);
+
+			const scanRingMaterial = new THREE.LineDashedMaterial({
+				color: 0x1c1917,
+				dashSize: 0.09,
+				gapSize: 0.06,
+				transparent: true,
+				opacity: 0.42,
+			});
+			const ringPoints: Array<THREE.Vector3> = [];
+			for (let index = 0; index < 128; index += 1) {
+				const angle = (index / 128) * Math.PI * 2;
+				ringPoints.push(new THREE.Vector3(Math.cos(angle) * 2.13, Math.sin(angle) * 2.13, -0.18));
+			}
+			const scanRing = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(ringPoints), scanRingMaterial);
+			scanRing.computeLineDistances();
+
+			const crosshairMaterial = new THREE.LineBasicMaterial({ color: 0x1c1917, transparent: true, opacity: 0 });
+			const crosshair = new THREE.LineSegments(
+				new THREE.BufferGeometry().setFromPoints([
+					new THREE.Vector3(-2.32, 0, -0.2), new THREE.Vector3(-1.82, 0, -0.2),
+					new THREE.Vector3(1.82, 0, -0.2), new THREE.Vector3(2.32, 0, -0.2),
+					new THREE.Vector3(0, -2.32, -0.2), new THREE.Vector3(0, -1.82, -0.2),
+					new THREE.Vector3(0, 1.82, -0.2), new THREE.Vector3(0, 2.32, -0.2),
+				]),
+				crosshairMaterial,
+			);
+
+			scene.add(new THREE.HemisphereLight(0xf4efe5, 0x292524, 1.2));
+			const keyLight = new THREE.DirectionalLight(0xf4efe5, 1.2);
+			keyLight.position.set(-3, 5, 5);
+			scene.add(keyLight);
+			const rimLight = new THREE.DirectionalLight(0xf4efe5, 1.2);
+			rimLight.position.set(4, -1, 4);
+			scene.add(rimLight);
+			const fillLight = new THREE.PointLight(0x292524, 1.2, 8);
+			fillLight.position.set(2.6, -2.2, 2.2);
+			scene.add(fillLight);
+
+			type SceneState = { rx: number; ry: number; rz: number; scale: number; x: number; y: number; explode: number };
+			const createStates = (isMobile: boolean): Record<string, SceneState> => {
+				const desktopX = isMobile ? 0.52 : 2.55;
+				return {
+					hero:      { rx: -0.12, ry: -0.52, rz: 0.03, scale: isMobile ? 0.43 : 0.8, x: isMobile ? 0 : 2.42, y: isMobile ? 1.46 : -0.02, explode: 0 },
+					system:    { rx: 0.08,  ry: 0.28,  rz: -0.07, scale: isMobile ? 0.32 : 0.63, x: desktopX, y: isMobile ? 0.64 : 0.02, explode: 0.12 },
+					variants:  { rx: 0.34,  ry: 1.28,  rz: 0.05, scale: isMobile ? 0.3 : 0.58, x: isMobile ? 0.52 : 2.68, y: isMobile ? 0.68 : 0.1, explode: 0.28 },
+					signal:    { rx: -0.28, ry: 2.38,  rz: -0.1, scale: isMobile ? 0.34 : 0.67, x: desktopX, y: isMobile ? 0.66 : 0, explode: 0.86 },
+					motion:    { rx: 0.46,  ry: 3.24,  rz: 0.12, scale: isMobile ? 0.33 : 0.65, x: desktopX, y: isMobile ? 0.66 : 0, explode: 0.36 },
+					mechanics: { rx: -0.05, ry: 4.34,  rz: -0.04, scale: isMobile ? 0.3 : 0.56, x: isMobile ? 0.52 : 2.68, y: isMobile ? 0.68 : 0.1, explode: 0.08 },
+					pipeline:  { rx: 0.2,   ry: 5.18,  rz: 0.07, scale: isMobile ? 0.33 : 0.63, x: desktopX, y: isMobile ? 0.64 : 0, explode: 0.62 },
+					protocols: { rx: -0.22, ry: 6.08,  rz: -0.08, scale: isMobile ? 0.3 : 0.56, x: isMobile ? 0.52 : 2.68, y: isMobile ? 0.68 : 0.08, explode: 0.22 },
+					footer:    { rx: 0.12,  ry: 6.72,  rz: 0.02, scale: isMobile ? 0.28 : 0.48, x: isMobile ? 0.52 : 2.72, y: isMobile ? 0.66 : 0.18, explode: 0 },
+				};
+			};
+			let states = createStates(mobile);
+			const sceneSections = Array.from(document.querySelectorAll<HTMLElement>('[data-scene]'));
+
+			let activePhase = 'hero';
+			let target = states.hero;
+			let currentExplode = 0;
+			let spinAngle = 0;
+			let previousFrameTime = 0;
+
+			const resolvePhase = () => {
+				const center = window.innerHeight * 0.5;
+				let closest = Number.POSITIVE_INFINITY;
+				let nextPhase = activePhase;
+				sceneSections.forEach((section) => {
+					const rect = section.getBoundingClientRect();
+					const distance = rect.top <= center && rect.bottom >= center
+						? 0
+						: Math.min(Math.abs(rect.top - center), Math.abs(rect.bottom - center));
+					if (distance < closest && section.dataset.scene && states[section.dataset.scene]) {
+						closest = distance;
+						nextPhase = section.dataset.scene;
+					}
+				});
+				if (nextPhase !== activePhase) {
+					activePhase = nextPhase;
+					target = states[activePhase];
+					stage.dataset.activeScene = activePhase;
+					if (phaseLabel) phaseLabel.textContent = activePhase.toUpperCase();
+				}
+			};
+
+			const resize = () => {
+				const nextMobile = window.innerWidth <= 900;
+				if (nextMobile !== mobile) {
+					mobile = nextMobile;
+					states = createStates(mobile);
+					target = states[activePhase] ?? states.hero;
+				}
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.position.z = mobile ? 10.4 : 7.6;
+				camera.updateProjectionMatrix();
+				renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1.25 : 1.7));
+				renderer.setSize(window.innerWidth, window.innerHeight, false);
+			};
+
+			const scaleTarget = new THREE.Vector3();
+			const updateDevice = (time: number, immediate = false) => {
+				const ease = immediate ? 1 : 0.055;
+				const frameDelta = previousFrameTime === 0 ? 0 : Math.min(64, time - previousFrameTime);
+				previousFrameTime = time;
+				if (!reducedMotion && activePhase !== 'hero') spinAngle += frameDelta * 0.00032;
+				device.rotation.x += (target.rx - device.rotation.x) * ease;
+				device.rotation.y += (target.ry + spinAngle - device.rotation.y) * ease;
+				device.rotation.z += (target.rz - device.rotation.z) * ease;
+				device.scale.lerp(scaleTarget.setScalar(target.scale), ease);
+				device.position.x += (target.x - device.position.x) * ease;
+				device.position.y += (target.y - device.position.y) * ease;
+				currentExplode += (target.explode - currentExplode) * ease;
+				moduleGroup.position.y = 1.52 + currentExplode * 0.34;
+				moduleGroup.position.z = currentExplode * 0.12;
+				electrodeMeshes.forEach((electrode, index) => {
+					const base = electrodeBases[index];
+					const radial = 1 + currentExplode * 0.14;
+					electrode.position.x = base.x * radial;
+					electrode.position.y = base.y * radial;
+					electrode.position.z = base.z + currentExplode * (0.2 + (index % 3) * 0.035);
+				});
+			};
+
+			let animationFrame = 0;
+			const animate = (time: number) => {
+				updateDevice(time);
+				renderer.render(scene, camera);
+				if (!reducedMotion && !document.hidden) animationFrame = requestAnimationFrame(animate);
+			};
+
+			resolvePhase();
+			device.position.set(target.x, target.y, 0);
+			device.rotation.set(target.rx, target.ry, target.rz);
+			device.scale.setScalar(target.scale);
+			stage.dataset.activeScene = activePhase;
+			animate(0);
+			stage.dataset.canvasReady = 'true';
+
+			window.addEventListener('resize', resize);
+			let phaseFrame = 0;
+			window.addEventListener('scroll', () => {
+				if (phaseFrame) return;
+				phaseFrame = requestAnimationFrame(() => {
+					phaseFrame = 0;
+					resolvePhase();
+					if (reducedMotion) {
+						updateDevice(0, true);
+						renderer.render(scene, camera);
+					}
+				});
+			}, { passive: true });
+			document.addEventListener('visibilitychange', () => {
+				cancelAnimationFrame(animationFrame);
+				if (!document.hidden && !reducedMotion) animationFrame = requestAnimationFrame(animate);
+			});
+			canvas.addEventListener('webglcontextlost', () => stage.classList.add('webgl-failed'));
+		} catch (error) {
+			stage.classList.add('webgl-failed');
+			console.error('WebGL scene unavailable', error);
+		}
+	}
+</script>

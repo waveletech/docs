@@ -1,0 +1,30 @@
+---
+import { translations, type Locale } from '../i18n/content';
+import { longformSections, type LongformSectionId } from '../i18n/longform';
+
+interface Props {
+	section: LongformSectionId;
+	locale: Locale;
+}
+
+const { section: sectionId, locale } = Astro.props;
+const section = longformSections.find((entry) => entry.id === sectionId);
+const t = translations[locale];
+---
+
+{
+	section && (
+		<div class="prose-flow" data-longform={sectionId} data-reveal>
+			{section.blocks.map((block) => (
+				<article class="prose-entry">
+					<p class="prose-index">
+						<span>{block.index}</span>
+						<span data-i18n="longform.meta">{t['longform.meta']}</span>
+					</p>
+					<h3 data-i18n={block.titleKey}>{t[block.titleKey]}</h3>
+					<p data-i18n={block.bodyKey}>{t[block.bodyKey]}</p>
+				</article>
+			))}
+		</div>
+	)
+}

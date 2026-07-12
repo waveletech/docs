@@ -1,23 +1,71 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import '../styles/global.css'
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+  title?: string
+  description?: string
+  locale?: 'zh' | 'en'
+}
+
+const {
+  title = '肌电数采腕带 | W/L Biointerface',
+  description = '面向机器人、动作捕捉与人机交互研究的多通道肌电与六轴运动数据采集腕带。',
+  locale = 'en',
+} = Astro.props
+---
+
+<!doctype html>
+<html
+  lang={locale === 'zh' ? 'zh-CN' : 'en'}
+  data-locale={locale}
+>
+  <head>
+    <meta charset='utf-8' />
+    <meta
+      name='viewport'
+      content='width=device-width, initial-scale=1'
+    />
+    <link
+      rel='icon'
+      type='image/svg+xml'
+      href='/favicon.svg'
+    />
+    <meta
+      name='generator'
+      content={Astro.generator}
+    />
+    <meta
+      id='page-description'
+      name='description'
+      content={description}
+    />
+    <meta
+      name='theme-color'
+      content='#f4efe5'
+    />
+    <meta
+      property='og:type'
+      content='website'
+    />
+    <meta
+      property='og:title'
+      content={title}
+    />
+    <meta
+      property='og:description'
+      content={description}
+    />
+    <script is:inline>
+      document.documentElement.classList.add('has-js')
+      window.setTimeout(() => {
+        if (!document.documentElement.classList.contains('app-ready')) {
+          document.documentElement.classList.remove('has-js')
+        }
+      }, 4500)
+    </script>
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
