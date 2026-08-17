@@ -1,3 +1,35 @@
+@font-face {
+	font-family: "IBM Plex Serif";
+	src: url("/fonts/ibm-plex-serif-regular.ttf") format("truetype");
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "IBM Plex Serif";
+	src: url("/fonts/ibm-plex-serif-semibold.ttf") format("truetype");
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "iA Writer Quattro S";
+	src: url("/fonts/ia-writer-quattro-s-regular.ttf") format("truetype");
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "iA Writer Quattro S";
+	src: url("/fonts/ia-writer-quattro-s-bold.ttf") format("truetype");
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+}
+
 :root {
 	--bg: #f4efe5;
 	--paper: #fbf7ee;
@@ -11,10 +43,31 @@
 	--red: var(--accent);
 	--green: var(--accent);
 	--panel: #1c1917;
-	--font-ui: "JetBrains Mono", "Cascadia Mono", "Cascadia Code", "SFMono-Regular", Consolas, "Microsoft YaHei UI", monospace;
-	--font-display: "JetBrains Mono", "Cascadia Mono", "Cascadia Code", "SFMono-Regular", Consolas, "Microsoft YaHei UI", monospace;
-	--font-mono: "JetBrains Mono", "Cascadia Mono", "Cascadia Code", "SFMono-Regular", Consolas, "Microsoft YaHei UI", monospace;
+	--font-display: "IBM Plex Serif", system-ui, sans-serif;
+	--font-body: "iA Writer Quattro S", system-ui, sans-serif;
+	--font-ui: var(--font-body);
+	--font-mono: var(--font-body);
+	--text-micro: 0.75rem;
+	--text-small: 0.875rem;
+	--text-body: 1rem;
+	--text-lede: 1.125rem;
+	--text-section: clamp(1.75rem, 2.3vw, 2.25rem);
+	--text-display: clamp(2.75rem, 3.75vw, 3.5rem);
+	--leading-tight: 1.1;
+	--leading-heading: 1.2;
+	--leading-body: 1.5;
+	--leading-reading: 1.65;
+	--space-1: 0.5rem;
+	--space-2: 0.75rem;
+	--space-3: 1rem;
+	--space-4: 1.5rem;
+	--space-5: 2rem;
+	--space-6: 3rem;
+	--space-7: 4rem;
+	--space-8: 6rem;
+	--space-9: 8rem;
 	font-family: var(--font-ui);
+	font-size: 16px;
 	color: var(--ink);
 	background: var(--bg);
 	font-synthesis: none;
@@ -47,6 +100,9 @@ body {
 	background-size: 180px 180px;
 	color: var(--ink);
 	font-family: var(--font-ui);
+	font-size: var(--text-body);
+	font-weight: 400;
+	line-height: var(--leading-body);
 	-webkit-font-smoothing: antialiased;
 }
 

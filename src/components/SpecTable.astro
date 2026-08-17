@@ -1,0 +1,55 @@
+---
+import type { SpecTable as SpecTableData } from '../i18n/product-site'
+
+interface Props {
+  table: SpecTableData
+}
+
+const { table } = Astro.props
+---
+
+<div class='wl-table-scroll' tabindex='0' aria-label={table.caption}>
+  <table class='wl-spec-table'>
+    <caption>{table.caption}</caption>
+    <thead>
+      {
+        table.groups && (
+          <tr class='wl-table-groups'>
+            <th scope='col' aria-hidden='true'></th>
+            {table.groups.map((group) => (
+              <th scope='colgroup' colspan={group.span}>{group.label}</th>
+            ))}
+          </tr>
+        )
+      }
+      <tr>
+        <th scope='col'>{table.modelLabel}</th>
+        {table.columns.map((column) => <th scope='col'>{column.name}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      <tr class='wl-product-image-row'>
+        <th scope='row'>{table.imageLabel}</th>
+        {
+          table.columns.map((column) => (
+            <td>
+              <img src={column.image} alt={column.name} loading='lazy' />
+            </td>
+          ))
+        }
+      </tr>
+      {
+        table.rows.map((row) => (
+          <tr class:list={{ 'is-accent': row.accent }}>
+            <th scope='row'>{row.label}</th>
+            {row.merged ? (
+              <td colspan={table.columns.length}>{row.merged}</td>
+            ) : (
+              row.values?.map((value) => <td>{value}</td>)
+            )}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,105 @@
+---
+import type { Locale, ProductKey } from '../i18n/product-site'
+import { homeContent, homePaths, paths } from '../i18n/product-site'
+import '../styles/product-site.css'
+
+interface Props {
+  locale: Locale
+  product?: ProductKey
+  detail?: boolean
+}
+
+const { locale, product, detail = false } = Astro.props
+const t = homeContent[locale]
+const homeHref = homePaths[locale]
+const languageOptions: Array<{ locale: Locale; label: string; href: string }> = [
+  {
+    locale: 'zh',
+    label: '中文',
+    href: product ? paths.zh[product] : homePaths.zh,
+  },
+  {
+    locale: 'en',
+    label: 'English',
+    href: product ? paths.en[product] : homePaths.en,
+  },
+]
+const currentLanguage = languageOptions.find((option) => option.locale === locale)!
+---
+
+<header class='wl-header'>
+  <a class='wl-logo' href={homeHref} aria-label='Waveletech home'>Waveletech</a>
+  <nav class='wl-nav' aria-label={locale === 'zh' ? '主导航' : 'Primary navigation'}>
+    {
+      t.navigation.map((item) => (
+        <a href={detail ? `${homeHref}${item.hash}` : item.hash}>{item.label}</a>
+      ))
+    }
+  </nav>
+  <div class='wl-header-actions'>
+    <details class='wl-language-menu'>
+      <summary class='wl-language-trigger' aria-label={t.languageLabel} title={currentLanguage.label}>
+        <span class='wl-language-icon' aria-hidden='true'></span>
+      </summary>
+      <div class='wl-language-popover' role='menu' aria-label={t.languageLabel}>
+        {
+          languageOptions.map((option) => (
+            <a
+              href={option.href}
+              role='menuitem'
+              lang={option.locale === 'zh' ? 'zh-CN' : 'en'}
+              aria-current={option.locale === locale ? 'page' : undefined}
+            >
+              <span>{option.label}</span>
+              {option.locale === locale && <span class='wl-language-check' aria-hidden='true'></span>}
+            </a>
+          ))
+        }
+      </div>
+    </details>
+
+    <details class='wl-mobile-menu'>
+      <summary
+        class='wl-mobile-menu-trigger'
+        aria-label={locale === 'zh' ? '打开导航菜单' : 'Open navigation menu'}
+      >
+        <span class='wl-burger-icon' aria-hidden='true'>
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </summary>
+      <nav class='wl-mobile-nav' aria-label={locale === 'zh' ? '移动端导航' : 'Mobile navigation'}>
+        {
+          t.navigation.map((item) => (
+            <a href={detail ? `${homeHref}${item.hash}` : item.hash}>{item.label}</a>
+          ))
+        }
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.wl-header').forEach((header) => {
+    const menus = Array.from(header.querySelectorAll<HTMLDetailsElement>('details'))
+
+    menus.forEach((menu) => {
+      menu.addEventListener('toggle', () => {
+        if (!menu.open) return
+        menus.forEach((other) => {
+          if (other !== menu) other.removeAttribute('open')
+        })
+      })
+    })
+
+    header.querySelectorAll<HTMLAnchorElement>('.wl-mobile-nav a').forEach((link) => {
+      link.addEventListener('click', () => link.closest('details')?.removeAttribute('open'))
+    })
+
+    document.addEventListener('click', (event) => {
+      if (!(event.target instanceof Node) || header.contains(event.target)) return
+      menus.forEach((menu) => menu.removeAttribute('open'))
+    })
+  })
+</script>

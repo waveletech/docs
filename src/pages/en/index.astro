@@ -1,0 +1,12 @@
+---
+import Welcome from '../../components/Welcome.astro'
+import Layout from '../../layouts/Layout.astro'
+import { homeContent, type Locale } from '../../i18n/product-site'
+
+const locale: Locale = 'en'
+const t = homeContent[locale]
+---
+
+<Layout title={t.meta.title} description={t.meta.description} locale={locale}>
+  <Welcome locale={locale} />
+</Layout>

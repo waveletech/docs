@@ -1,0 +1,72 @@
+---
+import DeviceScene from './DeviceScene.astro'
+import SiteHeader from './SiteHeader.astro'
+import SpecTable from './SpecTable.astro'
+import {
+  homePaths,
+  paths,
+  productContent,
+  type Locale,
+  type ProductKey,
+} from '../i18n/product-site'
+
+interface Props {
+  locale: Locale
+  product: ProductKey
+}
+
+const { locale, product } = Astro.props
+const t = productContent[locale][product]
+const productPath = paths[locale][product]
+---
+
+<DeviceScene />
+<SiteHeader locale={locale} product={product} detail />
+
+<main class='wl-main wl-detail'>
+  <nav class='wl-detail-index' aria-label={t.indexLabel}>
+    <a href='#overview'>{t.overviewLabel}</a>
+    <a href='#selection'>{t.tableLabel}</a>
+    <a href='#interface'>{t.docsLabel}</a>
+  </nav>
+
+  <section id='overview' class='wl-detail-section wl-detail-overview' data-scene='detail-overview'>
+    <div class='wl-detail-copy'>
+      <h1>{locale === 'zh' ? t.familyTitle : t.pageTitle}</h1>
+      <p class='wl-family-title'>{t.familyTitle}</p>
+      <p class='wl-lede'>{t.lead}</p>
+      <ul class='wl-feature-list wl-detail-features'>
+        {t.features.map((feature) => <li>{feature}</li>)}
+      </ul>
+      <div class='wl-secondary'>
+        <h2>{t.secondaryTitle}</h2>
+        <ol>
+          {t.secondaryItems.map((item) => <li>{item}</li>)}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id='selection' class='wl-detail-section wl-selection' data-scene='detail-selection'>
+    <div class='wl-detail-copy'>
+      <h2>{t.tableLabel}</h2>
+      <SpecTable table={t.table} />
+    </div>
+  </section>
+
+  <section id='interface' class='wl-detail-section wl-interface' data-scene='detail-interface'>
+    <div class='wl-detail-copy'>
+      <h2>{t.interfaceDocsTitle}</h2>
+      <p>{t.interfaceDocsNote}</p>
+      <a class='wl-doc-link' href={t.interfaceDocsLink}>{t.interfaceDocsTitle}<span>↗</span></a>
+      <div class='wl-detail-footer'>
+        <a href={homePaths[locale]}>← {t.backLabel}</a>
+        <code>{productPath}</code>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  document.documentElement.classList.add('app-ready')
+</script>

@@ -1,0 +1,12 @@
+---
+import ProductDetail from '../../components/ProductDetail.astro'
+import Layout from '../../layouts/Layout.astro'
+import { productContent } from '../../i18n/product-site'
+
+const t = productContent.zh.openInteraction
+---
+
+<Layout title={t.meta.title} description={t.meta.description} locale='zh'>
+  <ProductDetail locale='zh' product='openInteraction' />
+</Layout>
+
