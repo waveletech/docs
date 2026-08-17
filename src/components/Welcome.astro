@@ -75,6 +75,11 @@ const t = homeContent[locale]
               <div class='wl-advantage-number'>{String(index + 1).padStart(2, '0')}</div>
               <div>
                 <h3>{item.title}</h3>
+                {item.metrics && (
+                  <p class='wl-advantage-metrics'>
+                    {item.metrics.before}<strong>{item.metrics.first}</strong>{item.metrics.between}<strong>{item.metrics.second}</strong>{item.metrics.after}
+                  </p>
+                )}
                 {item.bullets.length > 0 && (
                   <ul>{item.bullets.map((bullet) => <li>{bullet}</li>)}</ul>
                 )}
@@ -83,7 +88,6 @@ const t = homeContent[locale]
           ))
         }
       </ol>
-      <p class='wl-proof'>{t.advantages.proof}</p>
     </div>
   </section>
 
