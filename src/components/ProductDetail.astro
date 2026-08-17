@@ -24,12 +24,6 @@ const productPath = paths[locale][product]
 <SiteHeader locale={locale} product={product} detail />
 
 <main class='wl-main wl-detail'>
-  <nav class='wl-detail-index' aria-label={t.indexLabel}>
-    <a href='#overview'>{t.overviewLabel}</a>
-    <a href='#selection'>{t.tableLabel}</a>
-    <a href='#interface'>{t.docsLabel}</a>
-  </nav>
-
   <section id='overview' class='wl-detail-section wl-detail-overview' data-scene='detail-overview'>
     <div class='wl-detail-copy'>
       <h1>{locale === 'zh' ? t.familyTitle : t.pageTitle}</h1>

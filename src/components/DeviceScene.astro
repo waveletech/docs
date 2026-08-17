@@ -1,14 +1,5 @@
 <div class="device-stage" data-device-stage aria-hidden="true">
 	<canvas class="device-canvas" data-device-canvas></canvas>
-	<div class="scene-hud hud-top">
-		<span>WL / NODE 18U</span>
-		<span data-scene-phase>BOOT</span>
-	</div>
-	<div class="scene-hud hud-bottom">
-		<span>EMG 18CH</span>
-		<span>IMU 6AX</span>
-		<span>SYNC LOCK</span>
-	</div>
 </div>
 
 <style>
@@ -36,44 +27,6 @@
 		display: none;
 	}
 
-
-	.scene-hud {
-		position: absolute;
-		right: clamp(18px, 3vw, 48px);
-		width: min(31vw, 460px);
-		display: flex;
-		justify-content: space-between;
-		font: 700 10px/1.2 var(--font-mono);
-		color: rgba(23, 26, 31, 0.58);
-	}
-
-	.scene-hud::before {
-		content: '';
-		position: absolute;
-		left: 0;
-		right: 0;
-		height: 1px;
-		background: rgba(23, 26, 31, 0.18);
-	}
-
-	.hud-top {
-		top: 92px;
-		padding-top: 10px;
-	}
-
-	.hud-top::before {
-		top: 0;
-	}
-
-	.hud-bottom {
-		bottom: 28px;
-		padding-bottom: 10px;
-	}
-
-	.hud-bottom::before {
-		bottom: 0;
-	}
-
 	@media (max-width: 900px) {
 		.device-stage {
 			opacity: 0.18;
@@ -82,22 +35,6 @@
 		.device-stage[data-active-scene='hero'] {
 			opacity: 0.7;
 		}
-
-		.scene-hud {
-			left: 18px;
-			right: 18px;
-			width: auto;
-			opacity: 0.52;
-		}
-
-		.hud-top {
-			top: 78px;
-		}
-
-		.hud-bottom {
-			display: none;
-		}
-
 	}
 </style>
 
@@ -108,7 +45,6 @@
 
 	const stage = document.querySelector<HTMLElement>('[data-device-stage]');
 	const canvas = document.querySelector<HTMLCanvasElement>('[data-device-canvas]');
-	const phaseLabel = document.querySelector<HTMLElement>('[data-scene-phase]');
 	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	if (stage && canvas) {
@@ -384,7 +320,6 @@
 					activePhase = nextPhase;
 					target = states[activePhase];
 					stage.dataset.activeScene = activePhase;
-					if (phaseLabel) phaseLabel.textContent = activePhase.toUpperCase();
 				}
 			};
 
