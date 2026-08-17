@@ -27,7 +27,7 @@ const productPath = paths[locale][product]
   <section id='overview' class='wl-detail-section wl-detail-overview' data-scene='detail-overview'>
     <div class='wl-detail-copy'>
       <h1>{locale === 'zh' ? t.familyTitle : t.pageTitle}</h1>
-      <p class='wl-family-title'>{t.familyTitle}</p>
+      {locale === 'en' && <p class='wl-family-title'>{t.familyTitle}</p>}
       <p class='wl-lede'>{t.lead}</p>
       <ul class='wl-feature-list wl-detail-features'>
         {t.features.map((feature) => <li>{feature}</li>)}

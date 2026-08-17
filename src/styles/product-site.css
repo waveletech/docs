@@ -559,21 +559,6 @@ html[data-locale='zh'] .wl-feature-list > li {
   list-style: none;
 }
 
-.wl-section.wl-advantages h2 {
-  max-width: none;
-  margin-bottom: var(--space-3);
-  font-size: var(--text-lede);
-  font-weight: 600;
-  line-height: 1.4;
-  letter-spacing: 0;
-}
-
-html[data-locale='zh'] .wl-section.wl-advantages h2 {
-  max-width: none;
-  font-size: var(--text-lede);
-  line-height: 1.4;
-}
-
 .wl-advantage-list > li {
   display: grid;
   grid-template-columns: var(--space-5) 1fr;
