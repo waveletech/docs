@@ -362,7 +362,7 @@ html[data-locale='zh'] .wl-detail h1 {
 }
 
 html[data-locale='zh'] .wl-hero-description {
-  line-height: 1.75;
+  line-height: var(--leading-body);
 }
 
 .wl-hero-description {
@@ -420,12 +420,12 @@ html[data-locale='zh'] .wl-detail-section h2 {
   letter-spacing: 0;
 }
 
-html[data-locale='zh'] .wl-lede {
-  line-height: 1.75;
+html[data-locale='zh'] .wl-series .wl-lede {
+  line-height: var(--leading-body);
 }
 
-html[data-locale='zh'] .wl-feature-list > li {
-  line-height: 1.75;
+html[data-locale='zh'] .wl-series .wl-feature-list > li {
+  line-height: var(--leading-body);
 }
 
 .wl-lede {
@@ -433,6 +433,10 @@ html[data-locale='zh'] .wl-feature-list > li {
   margin: 0 0 var(--space-5);
   color: var(--wl-ink);
   font: 400 var(--text-lede)/var(--leading-reading) var(--font-body);
+}
+
+.wl-series .wl-lede {
+  line-height: var(--leading-body);
 }
 
 .wl-feature-list {

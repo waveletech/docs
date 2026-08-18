@@ -121,16 +121,16 @@ export const homePaths: Record<Locale, string> = {
 const homeSeriesZh: HomeSeries[] = [
   {
     id: 'data-acquisition',
-    index: '01 / DATA ACQUISITION',
+    index: '01/DATA ACQUISITION',
     title: '数采腕带系列',
     description:
       '高通道、高采样率、低噪声、柔性设计——专为大规模数据采集与模型训练打造',
     features: [
-      '18通道 & 24bit 高分辨率 & 2kHz 采样率',
-      '高精度 6 轴 IMU 运动感知',
-      '全柔性设计表带，宽度仅 25mm、厚度仅 3mm，圆润电极',
-      '开源生态，开放第三方数据接口与 SDK',
-      '标配 Windows 波形绘制软件：支持 18 通道 EMG 与 6 通道 IMU 实时波形绘制、数据保存（MAT/CSV 等格式）',
+      '18通道&24bit高分辨率&2kHz采样率',
+      '高精度6轴IMU运动感知',
+      '全柔性设计表带，宽度仅25mm、厚度仅3mm，圆润电极',
+      '开源生态，开放第三方数据接口与SDK',
+      '标配Windows波形绘制软件：支持18通道EMG与6通道IMU实时波形绘制、数据保存（MAT/CSV等格式）',
     ],
     applicationTitle: '应用场景',
     applications: [
@@ -145,18 +145,18 @@ const homeSeriesZh: HomeSeries[] = [
   },
   {
     id: 'open-interaction',
-    index: '02 / OPEN INTERACTION',
+    index: '02/OPEN INTERACTION',
     title: '开源交互腕带系列',
     description:
       '基于自研神经传感芯片与高效边缘端计算的手部意图识别——让自然手势交互触手可及',
     features: [
-      '6通道超高密度 EMG 采集 + 高精度 6 轴 IMU 融合',
+      '6通道超高密度EMG采集+高精度6轴IMU融合',
       '延迟低至毫秒级，轻松实现捏合、指尖微动等自然手势识别',
       '免手势校准与训练，全人群泛化',
-      '全柔性设计表带，宽度仅 25mm、厚度仅 3mm，圆润电极',
-      '低功耗蓝牙（BLE）HID 通用无线协议，无缝接入手机、电脑、智能终端、智能眼镜、虚拟现实设备',
-      '兼容 Windows、安卓、iOS 等主流平台',
-      '开源生态，开放第三方数据接口与 SDK，输出力度与姿态数据，可用于二次开发与个性化映射',
+      '全柔性设计表带，宽度仅25mm、厚度仅3mm，圆润电极',
+      '低功耗蓝牙（BLE）HID通用无线协议，无缝接入手机、电脑、智能终端、智能眼镜、虚拟现实设备',
+      '兼容Windows、安卓、iOS等主流平台',
+      '开源生态，开放第三方数据接口与SDK，输出力度与姿态数据，可用于二次开发与个性化映射',
     ],
     applicationTitle: '交互方向',
     applications: ['鼠标映射', '触屏映射', '键盘映射', '原始数据开发'],
@@ -222,9 +222,9 @@ const homeSeriesEn: HomeSeries[] = [
 export const homeContent: Record<Locale, HomeContent> = {
   zh: {
     meta: {
-      title: '唯理 Waveletech｜肌电神经腕带',
+      title: '唯理Waveletech｜肌电神经腕带',
       description:
-        '唯理专业级肌电神经腕带产品系列，为数据采集、智能交互与康复算法提供高质量 EMG 与 IMU 数据。',
+        '唯理专业级肌电神经腕带产品系列，为数据采集、智能交互与康复算法提供高质量EMG与IMU数据。',
     },
     navigation: [
       { label: '数采腕带', hash: '#data-acquisition' },
@@ -235,10 +235,10 @@ export const homeContent: Record<Locale, HomeContent> = {
     languageLabel: 'Switch to English',
     languageShort: 'EN',
     hero: {
-      eyebrow: 'WAVELETECH / NEURAL INTERFACE',
+      eyebrow: 'WAVELETECH/NEURAL INTERFACE',
       title: ['让手部每一个动作意图，', '都成为可计算的数据'],
       description:
-        '唯理新一代专业级肌电神经腕带产品系列，以多通道高质量肌电与神经信号采集为基础，结合 IMU 运动感知、开放式数据接口，帮助研究人员更加高效地获取真实、连续、可分析的肌电数据。无论是具身智能遥操作与数据训练、手功能康复算法研发，还是下一代人机交互，唯理腕带产品都能为您提供稳定、精准、高效的硬核支撑。',
+        '唯理新一代专业级肌电神经腕带产品系列，以多通道高质量肌电与神经信号采集为基础，结合IMU运动感知、开放式数据接口，帮助研究人员更加高效地获取真实、连续、可分析的肌电数据。无论是具身智能遥操作与数据训练、手功能康复算法研发，还是下一代人机交互，唯理腕带产品都能为您提供稳定、精准、高效的硬核支撑。',
       stats: [
         { value: '60+', label: '大学及研究机构' },
         { value: '100+', label: '企业' },
@@ -246,7 +246,7 @@ export const homeContent: Record<Locale, HomeContent> = {
     },
     series: homeSeriesZh,
     advantages: {
-      index: '03 / ADVANTAGES',
+      index: '03/ADVANTAGES',
       title: '核心优势',
       items: [
         {
@@ -260,7 +260,7 @@ export const homeContent: Record<Locale, HomeContent> = {
           title: '舒适性与高性能的极致统一',
           bullets: [
             '全柔性表带结构设计，圆润贴合电极，无需打磨皮肤或使用大量导电膏即可获得高信噪比信号。',
-            '针对微弱肌电信号（μV 级别）特别优化，内置高阶硬件滤波器，抑制工频干扰与人体运动伪影。',
+            '针对微弱肌电信号（μV级别）特别优化，内置高阶硬件滤波器，抑制工频干扰与人体运动伪影。',
           ],
         },
         {
@@ -269,15 +269,15 @@ export const homeContent: Record<Locale, HomeContent> = {
           metrics: {
             before: '',
             first: '60+',
-            between: ' 顶尖高校及科研机构、',
+            between: '顶尖高校及科研机构、',
             second: '100+',
-            after: ' 企业',
+            after: '企业',
           },
         },
       ],
     },
     contact: {
-      index: '04 / CONTACT',
+      index: '04/CONTACT',
       title: '联系我们',
       businessLabel: '商务合作',
       addressLabel: '公司地址',
@@ -285,9 +285,9 @@ export const homeContent: Record<Locale, HomeContent> = {
       emails: ['wuzhifeng@waveletech.com', 'wangyu1@waveletech.com'],
       phones: ['13121989350', '15650783629'],
       address:
-        '北京市海淀区学研大厦B座104 / 苏州吴江区科技创业园1号楼4层 / 深圳高新南七道19号',
+        '北京市海淀区学研大厦B座104/苏州吴江区科技创业园1号楼4层/深圳高新南七道19号',
       wechat: 'Waveletech唯理',
-      copyright: 'Copyright © 2019-2026 苏州唯理创新科技有限公司 All rights',
+      copyright: 'Copyright © 2019-2026苏州唯理创新科技有限公司All rights',
     },
   },
   en: {
@@ -377,8 +377,8 @@ const dataTableZh: SpecTable = {
   modelLabel: '产品型号',
   imageLabel: '产品图',
   groups: [
-    { label: '第一代肌电腕带 · 唯理科技', span: 2 },
-    { label: '第二代肌电腕带 · 唯理科技', span: 4 },
+    { label: '第一代肌电腕带·唯理科技', span: 2 },
+    { label: '第二代肌电腕带·唯理科技', span: 4 },
   ],
   columns: [
     { name: '8通道蓝牙款', image: dataImages[0] },
@@ -415,12 +415,12 @@ const dataTableZh: SpecTable = {
     {
       label: '数据传输方式',
       values: [
-        '蓝牙 BLE\n原始数据透传',
-        '有线 Type-C\n原始数据透传',
-        '蓝牙 BLE\n原始数据透传',
-        '有线 Type-C\n原始数据透传',
+        '蓝牙BLE\n原始数据透传',
+        '有线Type-C\n原始数据透传',
+        '蓝牙BLE\n原始数据透传',
+        '有线Type-C\n原始数据透传',
         '无线\n原始数据传输或滤波后透传，内置肌电滤波器',
-        '有线 Type-C\n原始数据传输或滤波后透传，内置肌电滤波器',
+        '有线Type-C\n原始数据传输或滤波后透传，内置肌电滤波器',
       ],
     },
     {
@@ -430,30 +430,30 @@ const dataTableZh: SpecTable = {
     {
       label: '肌电数据',
       values: [
-        '采样率 250sps\n-3dB 带宽 0–63Hz\n数据位宽 24bit',
-        '采样率 2000sps\n信号 -3dB 带宽 0–500Hz\n数据位宽 24bit',
-        '采样率 2000sps\n-3dB 带宽 0–1000Hz\n数据位宽 24bit',
-        '采样率 2000sps\n-3dB 带宽 0–1000Hz\n数据位宽 24bit',
-        '采样率 2000sps\n-3dB 带宽 0–1000Hz\n数据位宽 24bit',
-        '采样率 2000sps\n-3dB 带宽 0–1000Hz\n数据位宽 24bit',
+        '采样率250sps\n-3dB带宽0–63Hz\n数据位宽24bit',
+        '采样率2000sps\n信号 -3dB带宽0–500Hz\n数据位宽24bit',
+        '采样率2000sps\n-3dB带宽0–1000Hz\n数据位宽24bit',
+        '采样率2000sps\n-3dB带宽0–1000Hz\n数据位宽24bit',
+        '采样率2000sps\n-3dB带宽0–1000Hz\n数据位宽24bit',
+        '采样率2000sps\n-3dB带宽0–1000Hz\n数据位宽24bit',
       ],
     },
     {
       label: '陀螺仪',
       values: [
-        '6轴陀螺仪，高精度 IMU\n采样率 104Hz',
-        '6轴陀螺仪，高精度 IMU\n采样率 208Hz',
-        '6轴陀螺仪，高精度 IMU\n采样率 208Hz',
-        '6轴陀螺仪，高精度 IMU\n采样率 208Hz',
-        '6轴陀螺仪，高精度 IMU\n采样率 208Hz',
-        '6轴陀螺仪，高精度 IMU\n采样率 208Hz',
+        '6轴陀螺仪，高精度IMU\n采样率104Hz',
+        '6轴陀螺仪，高精度IMU\n采样率208Hz',
+        '6轴陀螺仪，高精度IMU\n采样率208Hz',
+        '6轴陀螺仪，高精度IMU\n采样率208Hz',
+        '6轴陀螺仪，高精度IMU\n采样率208Hz',
+        '6轴陀螺仪，高精度IMU\n采样率208Hz',
       ],
     },
     {
       label: '配套软件',
       values: [
-        '波形绘制 + 手势训练软件\n需另付费 499',
-        '波形绘制 + 手势训练软件\n需另付费 499',
+        '波形绘制+手势训练软件\n需另付费499',
+        '波形绘制+手势训练软件\n需另付费499',
         '标配波形绘制软件',
         '标配波形绘制软件',
         '标配波形绘制软件',
@@ -577,19 +577,19 @@ const interactionTableZh: SpecTable = {
     {
       label: '产品描述',
       values: [
-        '一款具备端侧手势识别能力的肌电神经腕带，无需手势训练和校准，佩戴后即可使用。识别到的手势结果通过蓝牙 HID 协议发送。',
-        '一款具备端侧手势识别能力的肌电神经腕带，无需手势训练和校准，佩戴后即可使用。识别到的手势结果通过蓝牙 HID 协议发送。',
-        '一款具备端侧手势识别能力的肌电神经腕带，无需手势训练和校准，佩戴后即可使用。识别到的手势结果通过蓝牙 HID 协议发送。',
+        '一款具备端侧手势识别能力的肌电神经腕带，无需手势训练和校准，佩戴后即可使用。识别到的手势结果通过蓝牙HID协议发送。',
+        '一款具备端侧手势识别能力的肌电神经腕带，无需手势训练和校准，佩戴后即可使用。识别到的手势结果通过蓝牙HID协议发送。',
+        '一款具备端侧手势识别能力的肌电神经腕带，无需手势训练和校准，佩戴后即可使用。识别到的手势结果通过蓝牙HID协议发送。',
         '一款数据透传的肌电神经腕带，可以通过蓝牙传输肌电原始数据，用于手势数据采集和手势识别训练。',
       ],
     },
     {
       label: '硬件参数',
       values: [
-        '6通道 EMG 肌电\n6轴 IMU',
-        '6通道 EMG 肌电\n6轴 IMU',
-        '6通道 EMG 肌电\n6轴 IMU',
-        '6通道 EMG 肌电\n6轴 IMU',
+        '6通道EMG肌电\n6轴IMU',
+        '6通道EMG肌电\n6轴IMU',
+        '6通道EMG肌电\n6轴IMU',
+        '6通道EMG肌电\n6轴IMU',
       ],
     },
     {
@@ -606,43 +606,43 @@ const interactionTableZh: SpecTable = {
     {
       label: '选型比较',
       merged:
-        'M1 和 T1 手势少，但响应快、灵敏度高，具有光标，熟练后交互体验接近鼠标和触屏；M1 更贴近鼠标，适合 Windows，T1 更贴近触屏，适合 iOS 与安卓。\nK1 手势多于 M1、特异性更高，但响应速度较低，使用感受接近键盘，适合简单页面功能映射。\nD1 不具备端侧计算，仅做数据透传，适合有开发能力的客户在 App 端自行开发手势识别模型。',
+        'M1和T1手势少，但响应快、灵敏度高，具有光标，熟练后交互体验接近鼠标和触屏；M1更贴近鼠标，适合Windows，T1更贴近触屏，适合iOS与安卓。\nK1手势多于M1、特异性更高，但响应速度较低，使用感受接近键盘，适合简单页面功能映射。\nD1不具备端侧计算，仅做数据透传，适合有开发能力的客户在App端自行开发手势识别模型。',
       accent: true,
     },
     {
       label: '数据传输方式',
       values: [
-        'BLE 蓝牙无线传输\nHID 协议',
-        'BLE 蓝牙无线传输\nHID 协议',
-        'BLE 蓝牙无线传输\nHID 协议',
-        'BLE 蓝牙无线传输\n自定义协议',
+        'BLE蓝牙无线传输\nHID协议',
+        'BLE蓝牙无线传输\nHID协议',
+        'BLE蓝牙无线传输\nHID协议',
+        'BLE蓝牙无线传输\n自定义协议',
       ],
     },
     {
       label: '数据传输内容',
       values: [
-        '鼠标模式对应的 HID 包；包含姿态及力度特征的自定义包',
-        '触屏模式对应的 HID 包；包含姿态及力度特征的自定义包',
-        '键盘模式对应的 HID 包；包含姿态及力度特征的自定义包',
-        '2kHz 采样率肌电数据；6轴陀螺仪数据',
+        '鼠标模式对应的HID包；包含姿态及力度特征的自定义包',
+        '触屏模式对应的HID包；包含姿态及力度特征的自定义包',
+        '键盘模式对应的HID包；包含姿态及力度特征的自定义包',
+        '2kHz采样率肌电数据；6轴陀螺仪数据',
       ],
     },
     {
       label: '蓝牙可连接的目标设备类型',
       values: [
-        'Windows 系统硬件',
-        '手机、平板等 iOS、安卓系统硬件',
-        '支持蓝牙 HID 协议的智能硬件，如手机、平板、智能眼镜；兼容 iOS、安卓、Windows',
-        '支持自定义数据协议的手机、平板、智能眼镜等；兼容 iOS、安卓、Windows',
+        'Windows系统硬件',
+        '手机、平板等iOS、安卓系统硬件',
+        '支持蓝牙HID协议的智能硬件，如手机、平板、智能眼镜；兼容iOS、安卓、Windows',
+        '支持自定义数据协议的手机、平板、智能眼镜等；兼容iOS、安卓、Windows',
       ],
     },
     {
       label: '肌电采集',
       values: [
-        '采用唯理自研 Galvani 肌电神经传感和计算芯片',
-        '采用唯理自研 Galvani 肌电神经传感和计算芯片',
-        '采用唯理自研 Galvani 肌电神经传感和计算芯片',
-        '采用唯理自研 Galvani 肌电神经传感和计算芯片',
+        '采用唯理自研Galvani肌电神经传感和计算芯片',
+        '采用唯理自研Galvani肌电神经传感和计算芯片',
+        '采用唯理自研Galvani肌电神经传感和计算芯片',
+        '采用唯理自研Galvani肌电神经传感和计算芯片',
       ],
     },
   ],
@@ -761,38 +761,38 @@ export const productContent: Record<
     dataAcquisition: {
       ...productBaseZh,
       meta: {
-        title: '数采腕带系列｜唯理 Waveletech',
+        title: '数采腕带系列｜唯理Waveletech',
         description: '唯理高通道、高采样率专业肌电数据采集腕带选型与技术说明。',
       },
       pageTitle: '数采腕带系列',
       familyTitle: '数采腕带系列',
       lead: '高通道、高采样率、低噪声、柔性设计——专为大规模数据采集与模型训练打造',
       features: [
-        '18通道超高密度 EMG 采集：覆盖前臂各组肌群电位变化，不遗漏微弱肌电细节。',
-        '24bit 高分辨率 & 2kHz 采样率：拥有 1kHz 超宽信号带宽与高动态范围。',
-        '高精度 6 轴 IMU 融合：208Hz 采样率，同步采集前臂肢体姿态等信息。',
-        '极致人体工学全柔性设计：表带宽度仅 25mm（与 Apple Watch Ultra 同宽），厚度仅 3mm，全柔性材质配圆润电极。',
-        '低延迟有线数据传输与蓝牙无线传输：通过 Type-C 或匹配接收器保证实时、无丢包传送。',
-        '边充边用 & 强大供电：内置可充电锂电池并支持外部供电，满足全天候长时间连续采集。',
+        '18通道超高密度EMG采集：覆盖前臂各组肌群电位变化，不遗漏微弱肌电细节。',
+        '24bit高分辨率&2kHz采样率：拥有1kHz超宽信号带宽与高动态范围。',
+        '高精度6轴IMU融合：208Hz采样率，同步采集前臂肢体姿态等信息。',
+        '极致人体工学全柔性设计：表带宽度仅25mm（与Apple Watch Ultra同宽），厚度仅3mm，全柔性材质配圆润电极。',
+        '低延迟有线数据传输与蓝牙无线传输：通过Type-C或匹配接收器保证实时、无丢包传送。',
+        '边充边用&强大供电：内置可充电锂电池并支持外部供电，满足全天候长时间连续采集。',
       ],
       secondaryTitle: '典型应用场景与开放生态',
       secondaryItems: [
         '具身智能与遥操作训练：采集手部动作，用于机器人手部动作模仿、手势解码与大模型训练。',
         '手部发力意图识别：通过微弱肌电信号捕捉肌肉微收缩与发力意图。',
         '康复算法研发：面向手功能障碍康复评估与被动/主动康复训练。',
-        '标配 Windows 专业波形绘制软件，支持 18 通道 EMG 与 6 通道 IMU 实时绘制及 MAT/CSV 保存。',
-        '开放第三方数据接口与 SDK，可快速集成至 Python、C++、ROS 等主流开发平台。',
+        '标配Windows专业波形绘制软件，支持18通道EMG与6通道IMU实时绘制及MAT/CSV保存。',
+        '开放第三方数据接口与SDK，可快速集成至Python、C++、ROS等主流开发平台。',
       ],
       table: dataTableZh,
       interfaceDocsTitle: '接口文档',
-      interfaceDocsNote: 'GitHub 接口文档地址待补充。当前入口保留为空链接。',
+      interfaceDocsNote: 'GitHub接口文档地址待补充。当前入口保留为空链接。',
       interfaceDocsLink: '',
     },
     openInteraction: {
       ...productBaseZh,
       meta: {
-        title: '开源交互腕带系列｜唯理 Waveletech',
-        description: '唯理开源神经交互腕带 M1、T1、K1、D1 选型与技术说明。',
+        title: '开源交互腕带系列｜唯理Waveletech',
+        description: '唯理开源神经交互腕带M1、T1、K1、D1选型与技术说明。',
       },
       pageTitle: '开源交互腕带系列',
       familyTitle: '开源交互腕带系列',
@@ -800,14 +800,14 @@ export const productContent: Record<
       features: homeSeriesZh[1].features,
       secondaryTitle: '开放交互能力',
       secondaryItems: [
-        'M1 将自然手势映射为鼠标操作，适合 Windows 与光标交互。',
-        'T1 将自然手势映射为触屏操作，适合 iOS、安卓手机和平板。',
-        'K1 提供更多键盘式功能映射，适合智能终端与简单页面控制。',
-        'D1 输出 2kHz 原始 EMG 与 6 轴 IMU 数据，适合自行训练和部署手势模型。',
+        'M1将自然手势映射为鼠标操作，适合Windows与光标交互。',
+        'T1将自然手势映射为触屏操作，适合iOS、安卓手机和平板。',
+        'K1提供更多键盘式功能映射，适合智能终端与简单页面控制。',
+        'D1输出2kHz原始EMG与6轴IMU数据，适合自行训练和部署手势模型。',
       ],
       table: interactionTableZh,
       interfaceDocsTitle: '接口文档',
-      interfaceDocsNote: 'GitHub 接口文档地址待补充。当前入口保留为空链接。',
+      interfaceDocsNote: 'GitHub接口文档地址待补充。当前入口保留为空链接。',
       interfaceDocsLink: '',
     },
   },

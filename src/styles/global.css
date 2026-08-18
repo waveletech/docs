@@ -2858,6 +2858,19 @@ h1 {
 	}
 }
 
+/* Keep all Chinese body copy on the same compact reading rhythm. */
+html[data-locale='zh'] {
+	--leading-reading: var(--leading-body);
+}
+
+html[data-locale='zh'] body {
+	line-height: var(--leading-body);
+}
+
+html[data-locale='zh'] body :is(p, li, dd, td, figcaption, figcaption span) {
+	line-height: var(--leading-body) !important;
+}
+
 /* Floating chapter progress */
 .scroll-meter {
 	display: none;
