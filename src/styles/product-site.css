@@ -875,8 +875,7 @@ html[data-locale='zh'] .wl-detail-section .wl-secondary h2 {
   border-top: 1px solid var(--wl-rule-strong);
 }
 
-.wl-detail-footer a,
-.wl-detail-footer code {
+.wl-detail-footer a {
   color: var(--wl-muted);
   font: 700 var(--text-small)/1.4 var(--font-body);
 }
@@ -1061,10 +1060,6 @@ html[data-locale='zh'] .wl-detail-section .wl-secondary h2 {
     display: block;
   }
 
-  .wl-detail-footer code {
-    display: block;
-    margin-top: var(--space-2);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

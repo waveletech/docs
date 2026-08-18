@@ -121,7 +121,7 @@ export const homePaths: Record<Locale, string> = {
 const homeSeriesZh: HomeSeries[] = [
   {
     id: 'data-acquisition',
-    index: '01/DATA ACQUISITION',
+    index: '01 / DATA ACQUISITION',
     title: '数采腕带系列',
     description:
       '高通道、高采样率、低噪声、柔性设计——专为大规模数据采集与模型训练打造',
@@ -145,7 +145,7 @@ const homeSeriesZh: HomeSeries[] = [
   },
   {
     id: 'open-interaction',
-    index: '02/OPEN INTERACTION',
+    index: '02 / OPEN INTERACTION',
     title: '开源交互腕带系列',
     description:
       '基于自研神经传感芯片与高效边缘端计算的手部意图识别——让自然手势交互触手可及',
@@ -235,7 +235,7 @@ export const homeContent: Record<Locale, HomeContent> = {
     languageLabel: 'Switch to English',
     languageShort: 'EN',
     hero: {
-      eyebrow: 'WAVELETECH/NEURAL INTERFACE',
+      eyebrow: 'WAVELETECH / NEURAL INTERFACE',
       title: ['让手部每一个动作意图，', '都成为可计算的数据'],
       description:
         '唯理新一代专业级肌电神经腕带产品系列，以多通道高质量肌电与神经信号采集为基础，结合IMU运动感知、开放式数据接口，帮助研究人员更加高效地获取真实、连续、可分析的肌电数据。无论是具身智能遥操作与数据训练、手功能康复算法研发，还是下一代人机交互，唯理腕带产品都能为您提供稳定、精准、高效的硬核支撑。',
@@ -246,7 +246,7 @@ export const homeContent: Record<Locale, HomeContent> = {
     },
     series: homeSeriesZh,
     advantages: {
-      index: '03/ADVANTAGES',
+      index: '03 / ADVANTAGES',
       title: '核心优势',
       items: [
         {
@@ -277,7 +277,7 @@ export const homeContent: Record<Locale, HomeContent> = {
       ],
     },
     contact: {
-      index: '04/CONTACT',
+      index: '04 / CONTACT',
       title: '联系我们',
       businessLabel: '商务合作',
       addressLabel: '公司地址',

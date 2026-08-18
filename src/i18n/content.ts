@@ -160,7 +160,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'protocol.check.baseline': '静息基线不少于5秒',
     'protocol.check.clock': '机器人时钟偏差低于目标阈值',
     'protocol.check.meta': '佩戴位置与任务标签写入元数据',
-    'footer.kicker': 'WL·GALVANI BIOINTERFACE',
+    'footer.kicker': 'WL · GALVANI BIOINTERFACE',
     'footer.title': '意图，已经进入数据流。',
     'footer.note':
       '视觉原型V0.1·参数依据提供的产品介绍整理，扩写内容仅用于首版页面展示。',

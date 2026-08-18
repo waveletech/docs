@@ -4,7 +4,6 @@ import SiteHeader from './SiteHeader.astro'
 import SpecTable from './SpecTable.astro'
 import {
   homePaths,
-  paths,
   productContent,
   type Locale,
   type ProductKey,
@@ -17,7 +16,6 @@ interface Props {
 
 const { locale, product } = Astro.props
 const t = productContent[locale][product]
-const productPath = paths[locale][product]
 ---
 
 <DeviceScene />
@@ -55,7 +53,6 @@ const productPath = paths[locale][product]
       <a class='wl-doc-link' href={t.interfaceDocsLink}>{t.interfaceDocsTitle}<span>↗</span></a>
       <div class='wl-detail-footer'>
         <a href={homePaths[locale]}>← {t.backLabel}</a>
-        <code>{productPath}</code>
       </div>
     </div>
   </section>

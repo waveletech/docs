@@ -53,7 +53,7 @@ const t = homeContent[locale]
           </ul>
           <div class='wl-applications'>
             <h3>{series.applicationTitle}</h3>
-            <p>{series.applications.join(' · ')}</p>
+            <p>{series.applications.join(locale === 'zh' ? '·' : ' · ')}</p>
           </div>
           <div class='wl-actions'>
             {series.ctas.map((cta, index) => (
